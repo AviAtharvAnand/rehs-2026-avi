@@ -17,4 +17,4 @@ while True:
         model="minimax-m2",
         messages=[{"role": "user", "content": question}],
     )
-    print("LLM: ", response.choices[0].message.content)
+    print("LLM: " + response.choices[0].message.content + "\n")
