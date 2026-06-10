@@ -18,7 +18,7 @@ response = client.chat.completions.create(
         What color is C’s hat, and why?"
     }],
 
-    extra_body = {"reasoning_effort": "high"}
+    extra_body = {"reasoning_effort": "low"}
 )
 
 print(response.choices[0].message.content)
