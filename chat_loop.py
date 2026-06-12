@@ -2,6 +2,7 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+model="minimax-m2"
 
 load_dotenv()
 client = OpenAI(
@@ -9,12 +10,13 @@ client = OpenAI(
     base_url=os.environ["NRP_LLM_BASE_URL"],
 )
 
+print(f"Start chatting with the {model} (type 'e' to exit)")
 while True:
-    question = input("Ask a question (or 'exit' to quit): ")
-    if question == "exit":
+    question = input("You: ")
+    if question == "e":
         break
     response = client.chat.completions.create(
         model="minimax-m2",
         messages=[{"role": "user", "content": question}],
     )
-    print("LLM: " + response.choices[0].message.content + "\n")
+    print(response.choices[0].message.content.lstrip("\n"))
