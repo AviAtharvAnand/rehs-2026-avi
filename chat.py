@@ -11,10 +11,10 @@ client = OpenAI(
 
 print("NRP chat. Press e to exit\n")
 
+content = input("Choose a style for your bot(ex. speak like a pirate): ")
 history = [
-        {"role": "system", "content": "normal"},
+        {"role": "system", "content": content},
     ]
-
 while True:
     question = input("You: ")
     print()
