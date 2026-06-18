@@ -9,7 +9,11 @@ from dotenv import load_dotenv
 from openai import OpenAI
 from rich import print
 from rich.panel import Panel
+from rich.markdown import Markdown
+from rich.console import Console
+from rich.live import Live
 
+console = Console()
 MODEL = "gpt-oss"
 
 load_dotenv()
@@ -19,13 +23,14 @@ client = OpenAI(
 )
 
 
-print(Panel("[blue]NRP chat. Press e to exit"))
+print(Panel("[blue]NRP chat. Press e to exit"), end = '')
 
 with open('history.json', 'r') as f:
     history = json.load(f)
 
 while True:
-    question = input("You: ")
+    hist = ''
+    question = input("\nYou: ")
     print()
     user_input = {"role": "user", "content": question}
     history.append(user_input)
@@ -37,13 +42,22 @@ while True:
 
     response = client.chat.completions.create(
         model = MODEL,
-        messages = history
+        messages = history,
+        stream = True
     )
-    reply = {"role": "assistant", "content": response.choices[0].message.content}
-    history.append(reply)
 
-    print(Panel(f"[green]{MODEL}: {response.choices[0].message.content}"))
-    print()
+    with Live(Panel(Markdown(hist)), console = console, refresh_per_second = 10) as live:
+        for chunk in response: 
+            if chunk.choices and len(chunk.choices) > 0:
+                delta = getattr(chunk.choices[0], 'delta', None)
+                content = getattr(delta, 'content', None)
+                if content:
+                    hist += content
+                    live.update(Panel(Markdown(hist)))
+    history.append({"role": "assistant", "content": hist})
+
+
+
 
 
 
