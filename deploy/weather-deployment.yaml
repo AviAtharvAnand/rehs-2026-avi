@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: avi-chatbot
+  namespace: rehs-2026-chatbot   # ← change this
+spec:
+  replicas: 1                 
+  selector:
+    matchLabels:
+      app: avi-chatbot
+  template:
+    metadata:
+      labels:
+        app: avi-chatbot
+    spec:
+      containers:
+      - name: weather
+        image: aviatharvanand/weather:latest
+        env:
+        - name: NRP_LLM_TOKEN
+          value: "Vi76ZaCU9TenivDL5YjN1LSgB8Bqkd6G"
+        - name: NRP_LLM_BASE_URL
+          value: "https://ellm.nrp-nautilus.io/v1"
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
