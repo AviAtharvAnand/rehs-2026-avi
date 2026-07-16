@@ -18,12 +18,20 @@ for file in Path("data/chunks").glob("*.json"):
 def embed(text: str) -> list[float]:
     return client.embeddings.create(model="qwen3-embedding", input=[text]).data[0].embedding
 
-coll = chromadb.PersistentClient(path="./chroma_db").get_or_create_collection("nrp_docs")
+chroma_client = chromadb.PersistentClient(path="./chroma_db")
 
-def search(query: str, k: int = 5) -> list[dict]:
-    res = coll.query(query_embeddings=[embed(query)], n_results=k)
-    return [
-        {"text": d, "source_url": m["source_url"], "title": m["title"], "score": s}
-        for d, m, s in zip(res["documents"][0], res["metadatas"][0], res["distances"][0])
-    ]
- 
+try:
+    chroma_client.delete_collection("nrp_docs")
+except Exception:
+    pass
+
+coll = chroma_client.create_collection("nrp_docs")
+
+coll.add(
+    ids=[c["id"] for c in chunks],
+    documents=[c["text"] for c in chunks],
+    embeddings=[embed(c["text"]) for c in chunks],
+    metadatas=[{"source_url": c["source_url"], "title": c["title"]} for c in chunks],
+)
+
+print(f"Indexed {coll.count()} chunks.")

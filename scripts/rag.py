@@ -1,0 +1,90 @@
+import os
+import streamlit as st
+from search import search
+from dotenv import load_dotenv
+from openai import OpenAI
+
+load_dotenv()
+client = OpenAI(api_key=os.environ["NRP_LLM_TOKEN"],
+                base_url=os.environ.get("NRP_LLM_BASE_URL", "https://ellm.nrp-nautilus.io/v1"))
+
+st.set_page_config(page_title="NRP Helper", page_icon="🤖")
+st.title("🤖 NRP Helper")
+
+system_prompt ={
+            "role": "system", "content": 
+            """
+                You are an NRP documentation assistant.
+
+                You answer ONLY from the documentation provided in the user's message.
+
+                Never use prior knowledge.
+                Never guess.
+                Never infer.
+                Never add information that is not explicitly stated in the documentation.
+                If the documentation does not contain the answer, say:
+                "The provided documentation does not contain enough information to answer this question."
+            """
+            }
+
+if "messages" not in st.session_state:
+    st.session_state.messages = [system_prompt]
+
+for msg in st.session_state.messages:
+    if msg["role"] != "system":
+        st.chat_message(msg["role"]).write(msg["content"])
+
+def token_stream(messages):
+    stream = client.chat.completions.create(model="gpt-oss", messages=messages, stream=True)
+    for chunk in stream:
+        if not chunk.choices:              # last chunk = usage only
+            continue
+        yield chunk.choices[0].delta.content or ""
+def call_llm(messages):
+    response = client.chat.completions.create(
+        model="gpt-oss",
+        messages=messages,
+        stream=False,
+        timeout=60,
+    )
+
+    return response.choices[0].message.content
+
+if prompt := st.chat_input("Ask about NRP..."):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.write(prompt)
+
+    with st.spinner("Searching NRP docs..."):
+        print("Searching...")
+        chunks = search(prompt, k=5)
+        print("Search finished")
+    
+    context = "\n\n---\n\n".join(f"[Source: {c['title']}]\n{c['text']}" for c in chunks)
+    grounded = f"""Use the NRP documentation below to answer. If the docs don't contain the
+        answer, say so honestly.
+        DOCS: {context}
+        QUESTION: {prompt}"""
+    messages_for_llm = [
+        system_prompt,
+        {
+            "role": "user",
+            "content": grounded,
+        },
+    ]
+
+    with st.chat_message("assistant"):
+        print("Calling LLM...")
+        answer = st.write_stream(token_stream(messages_for_llm))
+        # answer = call_llm(messages_for_llm)
+        # st.markdown(answer)
+        print("LLM finished")
+
+        with st.expander("📚 Sources"):
+            for c in chunks:
+                st.markdown(
+                    f"- [{c['title']}]({c['source_url']}) "
+                    f"*(distance: {c['score']:.3f})*"
+                )
+
+    st.session_state.messages.append({"role": "assistant", "content": answer})
