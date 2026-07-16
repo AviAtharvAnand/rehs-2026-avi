@@ -11,6 +11,12 @@ client = OpenAI(api_key=os.environ["NRP_LLM_TOKEN"],
 st.set_page_config(page_title="NRP Helper", page_icon="🤖")
 st.title("🤖 NRP Helper")
 
+with st.sidebar:
+    st.header("Settings")
+    if st.button("🗑️ Clear chat"):
+        st.session_state.pop("messages", None)
+        st.rerun()
+
 system_prompt ={
             "role": "system", "content": 
             """
