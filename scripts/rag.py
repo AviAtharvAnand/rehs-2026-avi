@@ -4,6 +4,7 @@ from search import search
 from dotenv import load_dotenv
 from openai import OpenAI
 from openai import BadRequestError
+import time
 
 load_dotenv()
 client = OpenAI(api_key=os.environ["NRP_LLM_TOKEN"],
@@ -41,12 +42,50 @@ for msg in st.session_state.messages:
     if msg["role"] != "system":
         st.chat_message(msg["role"]).write(msg["content"])
 
+# def token_stream(messages):
+#     stream = client.chat.completions.create(model="gpt-oss", messages=messages, stream=True)
+#     for chunk in stream:
+#         if not chunk.choices:              # last chunk = usage only
+#             continue
+#         yield chunk.choices[0].delta.content or ""
+
 def token_stream(messages):
-    stream = client.chat.completions.create(model="gpt-oss", messages=messages, stream=True)
+    request_start = time.time()
+
+    print("Sending request to LLM...", flush=True)
+
+    stream = client.chat.completions.create(
+        model="gpt-oss",
+        messages=messages,
+        stream=True,
+        timeout=60,
+    )
+
+    print(
+        f"LLM request returned stream object after "
+        f"{time.time() - request_start:.2f} seconds",
+        flush=True,
+    )
+
+    first_token_received = False
+
     for chunk in stream:
-        if not chunk.choices:              # last chunk = usage only
+        if not chunk.choices:
             continue
-        yield chunk.choices[0].delta.content or ""
+
+        content = chunk.choices[0].delta.content
+
+        if content:
+            if not first_token_received:
+                print(
+                    f"First token received after "
+                    f"{time.time() - request_start:.2f} seconds",
+                    flush=True,
+                )
+                first_token_received = True
+
+            yield content
+
 def call_llm(messages):
     response = client.chat.completions.create(
         model="gpt-oss",
@@ -88,11 +127,19 @@ if prompt := st.chat_input("Ask about NRP..."):
     ]
 
     with st.chat_message("assistant"):
-        print("Calling LLM...")
+        print("Calling LLM...", flush=True)
+        prompt_characters = sum(
+            len(message.get("content", ""))
+            for message in messages_for_llm
+        )
+
+        print(f"Messages sent: {len(messages_for_llm)}", flush=True)
+
+        print(f"Total prompt size: {prompt_characters} characters", flush=True)
         answer = st.write_stream(token_stream(messages_for_llm))
         # answer = call_llm(messages_for_llm)
         # st.markdown(answer)
-        print("LLM finished")
+        print("LLM finished", flush=True)
 
         with st.expander("📚 Sources"):
             for c in chunks:
