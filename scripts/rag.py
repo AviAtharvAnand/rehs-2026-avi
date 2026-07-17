@@ -61,10 +61,19 @@ if prompt := st.chat_input("Ask about NRP..."):
     with st.chat_message("user"):
         st.write(prompt)
 
-    with st.spinner("Searching NRP docs..."):
-        print("Searching...")
-        chunks = search(prompt, k=5)
-        print("Search finished")
+    from openai import BadRequestError
+
+    try:
+        with st.spinner("Searching NRP docs..."):
+            chunks = search(prompt, k=5)
+
+    except BadRequestError as error:
+        print(f"Embedding gateway error: {error}", flush=True)
+        st.error(
+            "The NRP embedding service is currently unavailable. "
+            "Please try again shortly."
+        )
+        st.stop()
     
     context = "\n\n---\n\n".join(f"[Source: {c['title']}]\n{c['text']}" for c in chunks)
     grounded = f"""Use the NRP documentation below to answer. If the docs don't contain the
