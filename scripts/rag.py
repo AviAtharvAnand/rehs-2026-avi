@@ -3,6 +3,7 @@ import streamlit as st
 from search import search
 from dotenv import load_dotenv
 from openai import OpenAI
+from openai import BadRequestError
 
 load_dotenv()
 client = OpenAI(api_key=os.environ["NRP_LLM_TOKEN"],
@@ -60,8 +61,6 @@ if prompt := st.chat_input("Ask about NRP..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
-
-    from openai import BadRequestError
 
     try:
         with st.spinner("Searching NRP docs..."):
