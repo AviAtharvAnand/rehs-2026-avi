@@ -64,7 +64,7 @@ if prompt := st.chat_input("Ask about NRP..."):
 
     try:
         with st.spinner("Searching NRP docs..."):
-            chunks = search(prompt, k=5)
+            chunks = search(prompt, k=2)
 
     except BadRequestError as error:
         print(f"Embedding gateway error: {error}", flush=True)
