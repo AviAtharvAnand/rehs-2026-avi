@@ -4,7 +4,10 @@ from search import search
 from dotenv import load_dotenv
 from openai import OpenAI
 from openai import BadRequestError
+from openai import APITimeoutError
+from openai import APIConnectionError
 import time
+
 
 load_dotenv()
 client = OpenAI(api_key=os.environ["NRP_LLM_TOKEN"],
@@ -42,20 +45,14 @@ for msg in st.session_state.messages:
     if msg["role"] != "system":
         st.chat_message(msg["role"]).write(msg["content"])
 
-# def token_stream(messages):
-#     stream = client.chat.completions.create(model="gpt-oss", messages=messages, stream=True)
-#     for chunk in stream:
-#         if not chunk.choices:              # last chunk = usage only
-#             continue
-#         yield chunk.choices[0].delta.content or ""
-
 def token_stream(messages):
     request_start = time.time()
 
     print("Sending request to LLM...", flush=True)
 
+    
     stream = client.chat.completions.create(
-        model="gpt-oss",
+        model="qwen3-small",
         messages=messages,
         stream=True,
         timeout=60,
@@ -85,16 +82,6 @@ def token_stream(messages):
                 first_token_received = True
 
             yield content
-
-def call_llm(messages):
-    response = client.chat.completions.create(
-        model="gemma",
-        messages=messages,
-        stream=False,
-        timeout=60,
-    )
-
-    return response.choices[0].message.content
 
 if prompt := st.chat_input("Ask about NRP..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
@@ -136,10 +123,21 @@ if prompt := st.chat_input("Ask about NRP..."):
         print(f"Messages sent: {len(messages_for_llm)}", flush=True)
 
         print(f"Total prompt size: {prompt_characters} characters", flush=True)
-        with st.spinner("Generating answer..."):
-            answer = st.write_stream(token_stream(messages_for_llm))
-        # answer = call_llm(messages_for_llm)
-        # st.markdown(answer)
+        try:
+            with st.spinner("Generating answer..."):
+                answer = st.write_stream(token_stream(messages_for_llm))
+
+        except APITimeoutError:
+            st.error(
+                "The selected LLM took too long to respond. "
+                "Please try again or use another model."
+            )
+            st.stop()
+
+        except APIConnectionError as error:
+            print(f"LLM connection error: {error}", flush=True)
+            st.error("Could not connect to the LLM service.")
+            st.stop()
         print("LLM finished", flush=True)
 
         with st.expander("📚 Sources"):
