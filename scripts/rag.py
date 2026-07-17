@@ -88,7 +88,7 @@ def token_stream(messages):
 
 def call_llm(messages):
     response = client.chat.completions.create(
-        model="gpt-oss",
+        model="gemma",
         messages=messages,
         stream=False,
         timeout=60,
@@ -136,7 +136,8 @@ if prompt := st.chat_input("Ask about NRP..."):
         print(f"Messages sent: {len(messages_for_llm)}", flush=True)
 
         print(f"Total prompt size: {prompt_characters} characters", flush=True)
-        answer = st.write_stream(token_stream(messages_for_llm))
+        with st.spinner("Generating answer..."):
+            answer = st.write_stream(token_stream(messages_for_llm))
         # answer = call_llm(messages_for_llm)
         # st.markdown(answer)
         print("LLM finished", flush=True)
