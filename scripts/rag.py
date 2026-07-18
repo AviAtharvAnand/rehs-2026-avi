@@ -7,6 +7,7 @@ from openai import BadRequestError
 from openai import APITimeoutError
 from openai import APIConnectionError
 import time
+import httpx
 
 
 load_dotenv()
@@ -127,10 +128,11 @@ if prompt := st.chat_input("Ask about NRP..."):
             with st.spinner("Generating answer..."):
                 answer = st.write_stream(token_stream(messages_for_llm))
 
-        except APITimeoutError:
+        except (APITimeoutError, httpx.ReadTimeout) as error:
+            print(f"LLM timeout: {error}", flush=True)
             st.error(
-                "The selected LLM took too long to respond. "
-                "Please try again or use another model."
+                "The model stopped responding before completing the answer. "
+                "Please try again."
             )
             st.stop()
 
