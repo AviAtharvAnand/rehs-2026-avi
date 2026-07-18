@@ -8,6 +8,7 @@ from openai import APITimeoutError
 from openai import APIConnectionError
 import time
 import httpx
+import re
 
 
 load_dotenv()
@@ -46,6 +47,51 @@ for msg in st.session_state.messages:
     if msg["role"] != "system":
         st.chat_message(msg["role"]).write(msg["content"])
 
+STOP_WORDS = {
+    "a", "an", "the", "is", "are", "i", "do", "does",
+    "how", "what", "where", "when", "why", "to", "of",
+    "for", "in", "on", "with", "and", "or",
+}
+
+def rerank(question: str, chunks: list[dict]) -> list[dict]:
+    question_words = set(
+        re.findall(r"\b[a-z0-9]+\b", question.lower())
+    )
+    keywords = question_words - STOP_WORDS
+
+    for chunk in chunks:
+        title_words = set(
+            re.findall(r"\b[a-z0-9]+\b", chunk["title"].lower())
+        )
+        text_words = set(
+            re.findall(r"\b[a-z0-9]+\b", chunk["text"].lower())
+        )
+
+        title_matches = len(keywords & title_words)
+        text_matches = len(keywords & text_words)
+
+        chunk["rank_score"] = (
+            chunk["score"]
+            - title_matches * 0.06
+            - text_matches * 0.03
+        )
+
+    return sorted(chunks, key=lambda chunk: chunk["rank_score"])
+
+
+def rewrite_search_query(question: str) -> str:
+    query = question.lower().strip()
+
+    query = re.sub(
+        r"^(?:how\s+(?:do|can|could|would)\s+(?:i|you)\s+|how\s+to\s+)",
+        "",
+        query,
+    )
+
+    query = re.sub(r"\bon nrp\b", "", query)
+
+    return " ".join(query.split()) or question
+
 def token_stream(messages):
     request_start = time.time()
 
@@ -57,6 +103,12 @@ def token_stream(messages):
         messages=messages,
         stream=True,
         timeout=60,
+        temperature=0.1,
+        extra_body={
+            "chat_template_kwargs": {
+                "enable_thinking": False
+            }
+        },
     )
 
     print(
@@ -88,10 +140,32 @@ if prompt := st.chat_input("Ask about NRP..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
-
     try:
         with st.spinner("Searching NRP docs..."):
-            chunks = search(prompt, k=2)
+            search_query = rewrite_search_query(prompt)
+            retrieved = search(search_query, k=20)
+            reranked = rerank(search_query, retrieved)
+
+            print("All retrieved and reranked chunks:", flush=True)
+            for index, chunk in enumerate(reranked, start=1):
+                print(
+                    f"{index}. {chunk['title']} | "
+                    f"distance: {chunk['score']:.3f} | "
+                    f"reranked: {chunk['rank_score']:.3f}",
+                    flush=True,
+                )
+            chunks = reranked[:2]
+
+            print(f"Original question: {prompt}", flush=True)
+            print(f"Rewritten search query: {search_query}", flush=True)
+
+            for index, chunk in enumerate(chunks, start=1):
+                print(
+                    f"{index}. {chunk['title']} | "
+                    f"distance: {chunk['score']:.3f} | "
+                    f"reranked: {chunk['rank_score']:.3f}",
+                    flush=True,
+                )
 
     except BadRequestError as error:
         print(f"Embedding gateway error: {error}", flush=True)
@@ -102,10 +176,23 @@ if prompt := st.chat_input("Ask about NRP..."):
         st.stop()
     
     context = "\n\n---\n\n".join(f"[Source: {c['title']}]\n{c['text']}" for c in chunks)
-    grounded = f"""Use the NRP documentation below to answer. If the docs don't contain the
-        answer, say so honestly.
-        DOCS: {context}
-        QUESTION: {prompt}"""
+    grounded = f"""
+    Use only the NRP documentation below to answer the question.
+
+    If the documentation does not contain the answer, respond exactly:
+    "The provided documentation does not contain enough information to answer this question."
+
+    Do not use outside knowledge.
+    Do not guess.
+
+    /no_think
+
+    DOCUMENTATION:
+    {context}
+
+    QUESTION:
+    {prompt}
+    """
     messages_for_llm = [
         system_prompt,
         {
@@ -143,10 +230,11 @@ if prompt := st.chat_input("Ask about NRP..."):
         print("LLM finished", flush=True)
 
         with st.expander("📚 Sources"):
-            for c in chunks:
+            for chunk in chunks:
                 st.markdown(
-                    f"- [{c['title']}]({c['source_url']}) "
-                    f"*(distance: {c['score']:.3f})*"
+                    f"- [{chunk['title']}]({chunk['source_url']}) "
+                    f"*(distance: {chunk['score']:.3f}, "
+                    f"reranked: {chunk['rank_score']:.3f})*"
                 )
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
