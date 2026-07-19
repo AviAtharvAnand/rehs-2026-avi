@@ -32,8 +32,6 @@ system_prompt ={
                 You answer ONLY from the documentation provided in the user's message.
 
                 Never use prior knowledge.
-                Never guess.
-                Never infer.
                 Never add information that is not explicitly stated in the documentation.
                 If the documentation does not contain the answer, say:
                 "The provided documentation does not contain enough information to answer this question."
@@ -48,32 +46,67 @@ for msg in st.session_state.messages:
         st.chat_message(msg["role"]).write(msg["content"])
 
 STOP_WORDS = {
-    "a", "an", "the", "is", "are", "i", "do", "does",
-    "how", "what", "where", "when", "why", "to", "of",
-    "for", "in", "on", "with", "and", "or",
+    "a", "an", "the", "is", "are", "i", "you", "we",
+    "do", "does", "did", "can", "could", "would", "should",
+    "how", "what", "where", "when", "why", "which",
+    "to", "of", "for", "in", "on", "with", "and", "or",
+    "my", "your", "me", "please",
 }
 
 def rerank(question: str, chunks: list[dict]) -> list[dict]:
-    question_words = set(
-        re.findall(r"\b[a-z0-9]+\b", question.lower())
-    )
-    keywords = question_words - STOP_WORDS
+    normalized_question = question.lower().strip()
+
+    query_words = [
+        word
+        for word in re.findall(r"\b[a-z0-9]+\b", normalized_question)
+        if word not in STOP_WORDS
+    ]
+
+    query_word_set = set(query_words)
+
+    # Build general two-word and three-word phrases.
+    query_phrases = []
+
+    for size in (2, 3):
+        for index in range(len(query_words) - size + 1):
+            phrase = " ".join(query_words[index:index + size])
+            query_phrases.append(phrase)
 
     for chunk in chunks:
+        title = chunk["title"].lower()
+        text = chunk["text"].lower()
+        combined_text = f"{title} {text}"
+
         title_words = set(
-            re.findall(r"\b[a-z0-9]+\b", chunk["title"].lower())
-        )
-        text_words = set(
-            re.findall(r"\b[a-z0-9]+\b", chunk["text"].lower())
+            re.findall(r"\b[a-z0-9]+\b", title)
         )
 
-        title_matches = len(keywords & title_words)
-        text_matches = len(keywords & text_words)
+        text_words = set(
+            re.findall(r"\b[a-z0-9]+\b", text)
+        )
+
+        title_matches = len(query_word_set & title_words)
+        text_matches = len(query_word_set & text_words)
+
+        # What fraction of the important query words occur in the chunk?
+        coverage = (
+            text_matches / len(query_word_set)
+            if query_word_set
+            else 0
+        )
+
+        # Reward matching any query phrase, not specific commands.
+        phrase_matches = sum(
+            1 for phrase in query_phrases
+            if phrase in combined_text
+        )
 
         chunk["rank_score"] = (
             chunk["score"]
-            - title_matches * 0.06
+            - title_matches * 0.08
             - text_matches * 0.03
+            - coverage * 0.15
+            - phrase_matches * 0.08
         )
 
     return sorted(chunks, key=lambda chunk: chunk["rank_score"])
@@ -90,6 +123,9 @@ def rewrite_search_query(question: str) -> str:
 
     query = re.sub(r"\bon nrp\b", "", query)
 
+    # Remove punctuation at the end.
+    query = re.sub(r"[?.!,;:]+$", "", query)
+
     return " ".join(query.split()) or question
 
 def token_stream(messages):
@@ -103,10 +139,10 @@ def token_stream(messages):
         messages=messages,
         stream=True,
         timeout=60,
-        temperature=0.1,
+        temperature=0.8,
         extra_body={
             "chat_template_kwargs": {
-                "enable_thinking": False
+                "enable_thinking": True
             }
         },
     )
@@ -154,16 +190,25 @@ if prompt := st.chat_input("Ask about NRP..."):
                     f"reranked: {chunk['rank_score']:.3f}",
                     flush=True,
                 )
-            chunks = reranked[:2]
+
+            if not reranked:
+                st.error("No documentation chunks were returned by search.")
+                st.stop()
+
+            chunks = reranked[:5]
 
             print(f"Original question: {prompt}", flush=True)
             print(f"Rewritten search query: {search_query}", flush=True)
 
+            print("\nChunks being sent to the LLM:", flush=True)
+
             for index, chunk in enumerate(chunks, start=1):
                 print(
-                    f"{index}. {chunk['title']} | "
-                    f"distance: {chunk['score']:.3f} | "
-                    f"reranked: {chunk['rank_score']:.3f}",
+                    f"\n===== Chunk {index}: {chunk['title']} =====\n"
+                    f"Source: {chunk['source_url']}\n"
+                    f"Distance: {chunk['score']:.3f}\n"
+                    f"Reranked: {chunk['rank_score']:.3f}\n\n"
+                    f"{chunk['text']}\n",
                     flush=True,
                 )
 
@@ -176,16 +221,15 @@ if prompt := st.chat_input("Ask about NRP..."):
         st.stop()
     
     context = "\n\n---\n\n".join(f"[Source: {c['title']}]\n{c['text']}" for c in chunks)
+    print("\n" + "=" * 80, flush=True)
+    print("FULL CONTEXT SENT TO LLM", flush=True)
+    print("=" * 80, flush=True)
+    print(context, flush=True)
+    print("=" * 80 + "\n", flush=True)
+
     grounded = f"""
-    Use only the NRP documentation below to answer the question.
-
-    If the documentation does not contain the answer, respond exactly:
-    "The provided documentation does not contain enough information to answer this question."
-
-    Do not use outside knowledge.
-    Do not guess.
-
-    /no_think
+    
+    Example: QUESTION: what is kubernetes?, ANSWER: Kubernetes is an open-source container orchestration platform.
 
     DOCUMENTATION:
     {context}
