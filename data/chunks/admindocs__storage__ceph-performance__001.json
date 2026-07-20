@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__storage__ceph-performance__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/storage/ceph-performance/",
+  "title": "Ceph Performance",
+  "text": "---\ntitle: Ceph Performance\ndescription: Ceph Performance\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n## Ceph performance\n\nCurrently we're referring to [this article](http://yourcmc.ru/wiki/Ceph_performance) regarding tuning Ceph.\n\nMost nodes are set up with PLP NVMe db and spinning drives."
+}

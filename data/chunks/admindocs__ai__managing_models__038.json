@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__ai__managing_models__038",
+  "source_url": "https://nrp.ai/documentation/admindocs/ai/managing_models/",
+  "title": "Managing_Models",
+  "text": "- weight: 100\n            podAffinityTerm:\n              labelSelector:\n                matchExpressions:\n                - key: group\n                  operator: In\n                  values:\n                  - kimi-bw-vllm\n              topologyKey: kubernetes.io/hostname\n      containers:\n      - args:\n        - |\n          RANK=0\n          MASTER_ADDR=\"kimi-bw-vllm-head-0.kimi-bw-vllm-master.nrp-llm.svc.cluster.local\""
+}

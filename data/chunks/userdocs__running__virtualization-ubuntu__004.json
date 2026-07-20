@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__virtualization-ubuntu__004",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/virtualization-ubuntu/",
+  "title": "Virtualization Ubuntu",
+  "text": "## Fixing the network issue\n\nIf you hit [this problem](https://github.com/kubevirt/kubevirt/issues/9993), add static MAC address to your VM:\n\n```\n      networks:\n      - name: default\n        pod: {}\n      domain:\n        devices:\n          interfaces:\n          - name: default\n            masquerade: {}\n            macAddress: \"02:00:00:00:00:02\"\n```\n\n## Using linux GUI\n\nFor better mouse tracking in VNC, add the tablet device:\n\n```\n      domain:\n        devices:\n          inputs:\n          - bus: usb\n            name: tablet1\n            type: tablet\n```"
+}

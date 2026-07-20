@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__tutorial__introduction__005",
+  "source_url": "https://nrp.ai/documentation/userdocs/tutorial/introduction/",
+  "title": "Introduction",
+  "text": "And by the way, no need to install Python locally, just reach out to the community on [Nautilus Support](https://nrp.ai/contact) to request access to the Jupyterlab running on Nautilus. It will run in your browser without any local software installations.\n\n## Getting Help\n\nNautilus is a community-based cluster, managed by a small group of NSF-funded administrators. Every effort has been made to provide a world-class computational platform, but Nautilus is also largely self-service and community supported. Users are expected to learn-by-doing, and generally rely on community-based resources for troubleshooting. A diverse and active user community can be found by joining the Nautilus Support channel. Having a Nautilus account is not required for access to Nautilus Support, but having access to Nautilus Support is required for joining Nautilus. Find out more about this by [joining the chat channel](https://nrp.ai/contact) today.\n\n# Now, let's get started...\n\n<LinkButton href=\"/documentation/userdocs/start/getting-started/\">Get Access</LinkButton>"
+}

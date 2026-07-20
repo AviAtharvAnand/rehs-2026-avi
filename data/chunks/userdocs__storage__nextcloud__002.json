@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__storage__nextcloud__002",
+  "source_url": "https://nrp.ai/documentation/userdocs/storage/nextcloud/",
+  "title": "Nextcloud",
+  "text": "[**rclone-manager**](https://github.com/Zarestia-Dev/rclone-manager) is also a cross-platform GUI that enables automatic mounting at system startup across major operating systems.\n\n## Using Nextcloud from shell\n\nTo access your Nextcloud storage from shell (or Jupyter), you can use the [**rclone**](https://rclone.org/) tool. It's already installed in our [Jupyterlab](https://jupyterhub-west.nrp-nautilus.io) service. While the web interface is also possible to use, rclone with WebDAV may be more reliable.\n\nFor updated information about accessing NextCloud with WebDAV, always refer to [Nextcloud's official documentation](https://docs.nextcloud.com/server/latest/user_manual/en/files/access_webdav.html).\n\nTo get access, create new rclone config:"
+}

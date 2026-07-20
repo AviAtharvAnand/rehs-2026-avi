@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__links__vis__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/links/vis/",
+  "title": "Vis",
+  "text": "---\ntitle: NRP Visualization Tools\ndescription: NRP Visualization Tools\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n<div class=\"border\">\n<strong>NRP visualization tools</strong>\n</div>\n<br>[Traceroute Visualization Tool][troute]\n<br>[Grafana Dashboards][grafana]\n\n[troute]: https://traceroute.nrp-nautilus.io/\n[grafana]: https://grafana.nrp-nautilus.io/?orgId=1"
+}

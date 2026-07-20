@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__storage__user-pvc-issues__002",
+  "source_url": "https://nrp.ai/documentation/admindocs/storage/user-pvc-issues/",
+  "title": "User Pvc Issues",
+  "text": "```sh\n    xfs_repair -L /dev/rbd5\n    ```\n\n    8. After repair, try mounting again:\n\n    ```sh\n    mount /dev/rbd5 /mnt\n    ```\n\n    9. Verify the filesystem:\n\n    ```sh\n    ls -lah /mnt\n    ```\n\n    10. Once everything looks good, unmount and unmap the device:\n\n    ```sh\n    umount /mnt\n    rbd unmap /dev/rbd5\n    ```\n\n\n    ---\n  </TabItem>\n\n    <TabItem label=\"Draining Storage Nodes\">\n\n    Make sure no PVCs (running pods) are using the storage class.\n    \n  </TabItem>\n</Tabs>"
+}

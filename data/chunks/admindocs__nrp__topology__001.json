@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__nrp__topology__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/nrp/topology/",
+  "title": "Topology",
+  "text": "---\ntitle: Topology\ndescription: NRP Topology\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n#### Current NRP nodes topology\n\n![GigaIO topology](~/assets/images/docs/GigaIO_FabreX_Update.jpg)"
+}

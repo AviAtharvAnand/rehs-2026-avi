@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__ai__managing_models__004",
+  "source_url": "https://nrp.ai/documentation/admindocs/ai/managing_models/",
+  "title": "Managing_Models",
+  "text": "Based on the above information, **identify the adequate number and type of GPUs**, and edit the configuration files below to deploy the model.\n\n### Core instructions\n\n:::caution\nIf you are a namespace administrator reading this manual for your own namespace, use a relatively high `ingress.kubernetes.io/timeout-server` annotation on your **Ingress** resource if you experience any timeouts.\n:::\n\nNote that `--enable-request-id-headers --otlp-traces-endpoint <endpoint>`, `OTEL_EXPORTER_OTLP_TRACES_INSECURE`, and `OTEL_SERVICE_NAME` are optional and used typically only for the NRP-hosted models. For SGLang, use `--log-requests --log-requests-level 1 --enable-metrics --enable-trace --otlp-traces-endpoint <endpoint>` with `OTEL_EXPORTER_OTLP_TRACES_INSECURE` and `OTEL_SERVICE_NAME`.\n\nThe below are the set of example resources required to deploy an LLM model on the `nrp-llm` namespace (similar in the `sdsc-llm` namespace, but check the `StatefulSet` or `Deployment` examples within the namespace for differences):\n\n**StatefulSet (Recommended):**"
+}

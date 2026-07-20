@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__ray-cluster__004",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/ray-cluster/",
+  "title": "Ray Cluster",
+  "text": "4. Access the Ray Dashboard\n   \n    Execute this command to create a tunnel (include `-n <namespace>`):\n    ```bash\n    kubectl port-forward service/raycluster-kuberay-head-svc 8265:8265 -n <namespace>\n    ```\n    Visit http://127.0.0.1:8265 in your browser for the Dashboard.\n\n5. Cleanup\n   \n    When the RayCluster is not needed anymore, uninstall the Helm release in the same namespace:\n    ```bash\n    helm uninstall raycluster -n <namespace>\n    # release \"raycluster\" uninstalled\n    ```\n    It might take several seconds for the RayCluster's pods to terminate. Confirm that the pods are gone by running:\n    ```bash\n    kubectl get pods -n <namespace>\n    ```\n\n</Steps>"
+}

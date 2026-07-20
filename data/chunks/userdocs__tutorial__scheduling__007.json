@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__tutorial__scheduling__007",
+  "source_url": "https://nrp.ai/documentation/userdocs/tutorial/scheduling/",
+  "title": "Scheduling",
+  "text": "Check the logs:\n\n```\nkubectl logs test-geo\n```\n\n## Optional: Reserved nodes and taints\n\nSome nodes are restricted and require explicit tolerations. You can view node taints at: https://nrp.ai/viz/resources/.\n\n:::caution\nTolerating a taint you're not explicitly allowed to tolerator by the cluster admins will result in being banned.\n:::\n\nIf a pod cannot be scheduled, inspect events:\n\n```\nkubectl get events --sort-by=.metadata.creationTimestamp\n```\n\nYou may see a NoSchedule taint. To tolerate it:\n\n```yaml\ntolerations:\n- key: nautilus.io/reservations\n  operator: Equals\n  value: \"name\"\n  effect: NoSchedule\n```"
+}

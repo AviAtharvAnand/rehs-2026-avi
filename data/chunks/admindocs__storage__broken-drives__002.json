@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__storage__broken-drives__002",
+  "source_url": "https://nrp.ai/documentation/admindocs/storage/broken-drives/",
+  "title": "Broken Drives",
+  "text": "1. On the node delete all LVs, VGs, PVs. Zap drives:\n\n    ```bash\n    for i in ...; do sgdisk --zap-all --clear --mbrtogpt -g /dev/$i && wipefs -a /dev/$i; done\n    ```\n\n    **You should not be able to see any drives for ceph in the output of `blkid`**\n\n1. Delete the OSDs from `/var/lib/rook` (not `MON` if it exists on the node)\n\n1. Uncordon the node\n\n1. Either change back the cephCluster object or wait for operator to reconcile it. Can also change a parameter in cephCluster to kick the reconcile. See the node added back.\n\n2. Revert the `osd_mclock_profile` setting\n</Steps>"
+}

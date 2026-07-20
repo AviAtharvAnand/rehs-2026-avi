@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__virtualization-talos__006",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/virtualization-talos/",
+  "title": "Virtualization Talos",
+  "text": "devices.kubevirt.io/kvm: \"1\"\n                    memory: 4G\n                    cpu: 2\n                devices:\n                  rng: {}\n                  autoattachSerialConsole: true\n                  autoattachGraphicsDevice: true\n                  disks:\n                    - name: talos-worker01-disk-vda-root\n                      bootOrder: 1\n                      disk:\n                        bus: virtio\n              volumes:\n                - name: talos-worker01-disk-vda-root\n                  dataVolume:\n                    name: talos-worker01-root\n          dataVolumeTemplates:\n            - metadata:\n                name: talos-worker01-root\n              spec:\n                pvc:\n                  accessModes:\n                    - ReadWriteOnce\n                  storageClassName: linstor-igrok\n                  resources:\n                    requests:\n                      storage: 10G\n                source:\n                  http:\n                    url: https://github.com/siderolabs/talos/releases/download/v1.12.2/metal-amd64.iso\n    ```"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__io-jobs__003",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/io-jobs/",
+  "title": "Io Jobs",
+  "text": "```\nspec:\n  template:\n    spec:\n      containers:\n        volumeMounts:\n          - name: \"ram-disk\"\n            mountPath: \"/ramdisk\"\n      volumes:\n        - name: ram-disk\n          emptyDir:\n            medium: \"Memory\"\n```\n\n#### Large dataset sampling strategies that work (and issues to watch out for)\n\nIf you have a large dataset (>100 GB) and need to sample data from it at a high IO rate (>100 MB/sec) the suggestions below will apply to you."
+}

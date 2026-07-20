@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__ai__managing_models__010",
+  "source_url": "https://nrp.ai/documentation/admindocs/ai/managing_models/",
+  "title": "Managing_Models",
+  "text": "**Example StatefulSet for an embedding model:**\n\nIn this case, **`--runner pooling` and `--convert embed`** are important arguments for embedding models, where there are no arguments regarding tool calling and reasoning parsers.\n\nThe below configuration example uses the CUDA 12.9 build of vLLM due to allowing older GPUs than Turing, such as the Tesla V100 GPU. The default is to use the CUDA 13 build.\n\n<details>\n<summary>Open</summary>"
+}

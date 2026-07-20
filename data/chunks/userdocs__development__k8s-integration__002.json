@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__development__k8s-integration__002",
+  "source_url": "https://nrp.ai/documentation/userdocs/development/k8s-integration/",
+  "title": "K8S Integration",
+  "text": "`echo <the token value> | base64 -d` - this will give you the service token field value\n      \n      `echo <the CA value> | base64 -d` - CA\n\n      API URL - get from your cluster config file (`https://67.58.53.148:443`)\n\n1. Uncheck `GitLab-managed cluster`, enter the namespace into `Project namespace prefix (optional, unique)`\n\n1. Click `Add kubernetes cluster`\n\nNow your cluster config will be available to tools like `kubectl` and `helm` to access your namespace. You can use [this project](https://gitlab.nrp-nautilus.io/prp/jupyterlab-west) as an example of how to automatically deploy a Helm application to your namespace and [this one](https://gitlab.nrp-nautilus.io/prp/nautilus-admission/-/blob/master/.gitlab-ci.yml#L28-39) to automatically update the deployment image."
+}

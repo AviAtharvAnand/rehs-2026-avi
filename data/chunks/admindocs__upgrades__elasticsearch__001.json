@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__upgrades__elasticsearch__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/upgrades/elasticsearch/",
+  "title": "Elasticsearch",
+  "text": "---\ntitle: Elasticsearch\ndescription: Elasticsearch\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n[Elasticsearch operator upgrade guide](https://www.elastic.co/guide/en/cloud-on-k8s/current/k8s-upgrading-eck.html)"
+}

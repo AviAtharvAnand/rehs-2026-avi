@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__ai__llm-managed__api-access__003",
+  "source_url": "https://nrp.ai/documentation/userdocs/ai/llm-managed/api-access/",
+  "title": "Api Access",
+  "text": "This is supported on vLLM and SGLang models. Without a cache salt, your cached prompts and responses can mix with other users' caches — which is convenient for shared utility queries but **prevents privacy** for sensitive prompts and may cause irrelevant cached results to surface in your output.\n\nWe would like to apply this automatically per API key but several upstream issues are blocking it: [Envoy AI Gateway #1985](https://github.com/envoyproxy/ai-gateway/issues/1985), [Open WebUI #23012](https://github.com/open-webui/open-webui/issues/23012)."
+}

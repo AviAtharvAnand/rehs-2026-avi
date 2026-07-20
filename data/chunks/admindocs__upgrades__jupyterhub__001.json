@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__upgrades__jupyterhub__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/upgrades/jupyterhub/",
+  "title": "Jupyterhub",
+  "text": "---\ntitle: JupyterHub\ndescription: JupyterHub\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n## Updating external images definitions\n\nCheck the versions for [Julia](https://gitlab.b-data.ch/julia), [R](https://gitlab.b-data.ch/r), [Python](https://gitlab.b-data.ch/python).\n\nModify [West Jupyterhub profiles list](https://gitlab.nrp-nautilus.io/prp/jupyterlab-west/-/blob/master/values.template.yaml#L639) as needed."
+}

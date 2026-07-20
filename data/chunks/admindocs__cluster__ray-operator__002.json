@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__cluster__ray-operator__002",
+  "source_url": "https://nrp.ai/documentation/admindocs/cluster/ray-operator/",
+  "title": "Ray Operator",
+  "text": "## Allow Other Namespaces to Create Ray Resources\n\nTo allow other namespaces to create Ray resources, run `kubectl edit clusterrole kubeless-user` and add the following section:\n\n```yaml\n- apiGroups:\n  - ray.io\n  resources:\n  - rayjobs\n  - rayservices\n  - rayclusters\n  verbs:\n  - list\n  - watch\n  - get\n  - update\n  - delete\n```\n\n## Cleaning Up KubeRay Operator\n\nTo uninstall the KubeRay Operator, run the following command:\n\n```bash\nhelm uninstall kuberay-operator\n# release \"kuberay-operator\" uninstalled\n```\n\nIt may take a few seconds for the KubeRay Operator pod to terminate. Confirm that the pods are gone by running:\n\n```bash\nkubectl get pods\n```"
+}

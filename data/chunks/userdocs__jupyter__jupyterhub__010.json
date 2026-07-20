@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__jupyter__jupyterhub__010",
+  "source_url": "https://nrp.ai/documentation/userdocs/jupyter/jupyterhub/",
+  "title": "Jupyterhub",
+  "text": "### Limit who has access\n\nWhen deploying a JupyterHub instance, you should lock down the service to who should have access rather than leaving the instance open. \n\nAt minimum, it should be [limited to your University](#limit-access-to-your-university).Further steps can be taken to limit it to [specific individuals](#allowed-users), which is recommended for labs and small classes.\n\n\n### Use Git\n\nWhile developing your configuration, Git will be a useful tool to keep track of any changes you make. \nIf something goes wrong with your configuration, using the history in Git will help revert any changes made that caused the issues. \nWhen working with the Nautilus cluster, you can use the [hosted Gitlab instance](https://gitlab.nrp-nautilus.io/) to keep track of the changes and then [automatically deploy the changes](#automatic-deployment).\n\n\n### Documentation\n\nAs you start and continue to use your JupyterHub instance, it is strongly encouraged to keep a running docment of how the instance is setup and any workflows or assignments that run on it. This will help others use and maintain the instance, along with helping with future development and debugging."
+}

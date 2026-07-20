@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__gateway__004",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/gateway/",
+  "title": "Gateway",
+  "text": "Check the status of GRPCRoute:\n\n```bash\nkubectl get grpcroutes --selector=example=grpc-routing -o yaml\n```\n\nThe status for the GRPCRoute should surface “Accepted=True” and a `parentRef` that references the example Gateway. The `yages` route matches any traffic for “test-service.nrp-nautilus.io” and forwards it to the “yages” Service.\n\nTest GRPC routing to the yages backend using the grpcurl command.\n\n```bash\ngrpcurl test-service.nrp-nautilus.io:50051 yages.Echo/Ping\n```\n\nYou should see the below response\n\n```yaml\n{\n  \"text\": \"pong\"\n}\n```\n\nEnvoy Gateway also supports gRPC-Web requests for this configuration. The below curl command can be used to send a grpc-Web request with over HTTP/2. You should receive the same response seen in the previous command.\n\nThe data in the body `AAAAAAA=` is a base64 encoded representation of an empty message (data length 0) that the Ping RPC accepts.\n\n```bash\ncurl -s https://test-service.nrp-nautilus.io:50051/yages.Echo/Ping -H 'Content-Type: application/grpc-web-text' -H 'Accept: application/grpc-web-text' -XPOST -d'AAAAAAA=' | base64 -d\n```"
+}

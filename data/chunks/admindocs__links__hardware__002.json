@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__links__hardware__002",
+  "source_url": "https://nrp.ai/documentation/admindocs/links/hardware/",
+  "title": "Hardware",
+  "text": "[odroid-n2]: https://www.hardkernel.com/blog-2/odroid-n2/\n[odroid-h2]: https://www.hardkernel.com/shop/odroid-h2/\n[som]: https://coral.withgoogle.com/products/som/\n[dev-board]: https://coral.withgoogle.com/products/dev-board/\n[xlinks]: https://www.xilinx.com/products/boards-and-kits/alveo.html\n[bittware]: https://www.bittware.com/fpga/xupp3r/\n\n[esnet-fiona]: https://fasterdata.es.net/science-dmz/DTN/fiona-flash-i-o-network-appliance\n[dtn]: https://fasterdata.es.net/science-dmz/DTN"
+}

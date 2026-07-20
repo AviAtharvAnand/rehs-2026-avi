@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__start__support__004",
+  "source_url": "https://nrp.ai/documentation/userdocs/start/support/",
+  "title": "Support",
+  "text": "````\n```\nimport psycopg2\n\nconn = psycopg2.connect(\"dbname=mydatabase user=myapp password=mypassword\")\ncur = conn.cursor()\ncur.execute(\"SELECT version();\")\nprint(cur.fetchone())\ncur.close()\nconn.close()\n```\n````\n\n:::note\nBy following these guidelines, you'll be able to ask effective questions that help our support team provide you with accurate and efficient solutions. Thank you for helping us help you!\n:::"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__dask-cluster__001",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/dask-cluster/",
+  "title": "Dask Cluster",
+  "text": "---\ntitle: Dask Cluster\ndescription: Dask Cluster\n---\n\n## Running a dask cluster in your namespace\n\nCreate a dask cluster according to [https://kubernetes.dask.org/en/latest/operator_resources.html](https://kubernetes.dask.org/en/latest/operator_resources.html), for example:"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__upgrades__cert-manager__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/upgrades/cert-manager/",
+  "title": "Cert Manager",
+  "text": "---\ntitle: Cert-manager\ndescription: Cert-manager\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n## Upgrading Cert-manager\n\nFollow the [static manifest upgrade instructions](https://cert-manager.io/docs/installation/upgrading/#upgrading-using-static-manifests)"
+}

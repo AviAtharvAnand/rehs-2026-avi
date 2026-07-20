@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__tutorial__introduction__003",
+  "source_url": "https://nrp.ai/documentation/userdocs/tutorial/introduction/",
+  "title": "Introduction",
+  "text": "## Steps to Successful Nautilus Use\n\nThere are several key steps which you must go through to get access to Nautilus. They are:\n\n<Steps>\n1. Establish an account\n\n2. Configure your local system to interact with Nautilus\n\n3. Be promoted to User or Admin\n\n4. Read and understand the policies\n\n5. For beginners, complete the [Tutorials](./basic)\n</Steps>\n\n:::caution\n\nFamiliarity with the Unix command line is the single biggest predictor of success with Nautilus. For most users who are unfamiliar with the Unix shell, this will prevent them from being able to use Nautilus, as it has no graphical user interface or desktop application. Users who do not understand the basic principles of Unix, lack the ability to navigate a Unix file system through a terminal window, do not understand Unix commands, have no experience with scripting or scripting languages, or have never written code before are highly discouraged from attempting to use Nautilus without first having a basic grasp of these skills.\n\n:::\n\n## What if I don't think I have time to learn a bunch of new skills?"
+}

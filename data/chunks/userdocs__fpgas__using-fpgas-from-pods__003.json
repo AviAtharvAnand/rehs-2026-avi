@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__fpgas__using-fpgas-from-pods__003",
+  "source_url": "https://nrp.ai/documentation/userdocs/fpgas/using-fpgas-from-pods/",
+  "title": "Using Fpgas From Pods",
+  "text": "| Attach Vivado `hw_server`/`xsdb`/OpenOCD to the JTAG TAP (debug)            | **Pod with `xilinx.com/fpga_jtag: N`**                                  | Raw USB device is mounted into the pod; you can run any JTAG client.                                           |\n| Reflash a card's base shell                                                 | **Contact cluster admins first** ([Nautilus Support](/contact)), then a pod with `fpga_jtag` + the FPGA resource | Flashing is destructive and needs a chassis power cycle — see the JTAG caution below.                          |\n| Run Vivado in a Linux VM (when containerised Vivado crashes)                | **KubeVirt VM in your namespace**                                       | Bypasses container/glibc issues; you install Vivado yourself inside the VM. See [Virtualization — Ubuntu](/documentation/userdocs/running/virtualization-ubuntu/). |"
+}

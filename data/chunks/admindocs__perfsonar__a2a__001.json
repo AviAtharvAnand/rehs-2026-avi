@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__perfsonar__a2a__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/perfsonar/a2a/",
+  "title": "A2A",
+  "text": "---\ntitle: A2A Maddash\ndescription: Description\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n#### All to All maddash\n\nThe [NRP][maddash1] maddash shows the connectivity between a node selected at each site. The sites are labelled in Kubernetes by the `topology.kubernetes.io/zone` label.\n\nTo get the node participating in the maddash, you can run this query (for example, starlight is the zone we're interested in):\n\n```bash\nkubectl get nodes -l nautilus.io/a2a-latency,topology.kubernetes.io/zone=starlight\nNAME                    STATUS   ROLES    AGE    VERSION\ndtn101.sl.startap.net   Ready    <none>   2y4d   v1.23.14\n```\n\n[maddash1]: https://perfsonar.nrp-nautilus.io/maddash-webui/"
+}

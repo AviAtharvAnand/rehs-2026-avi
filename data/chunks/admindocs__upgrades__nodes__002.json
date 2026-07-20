@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__upgrades__nodes__002",
+  "source_url": "https://nrp.ai/documentation/admindocs/upgrades/nodes/",
+  "title": "Nodes",
+  "text": "Here's an example of the configs:\n```\nkubernetes_version: \"1.26.11\"\nkubernetes_repo_version: \"v1.26\"\ncrio_version: \"1.26\"\n```\n\nThe value of `kubernetes_repo` should include the patch version and match the version of `kubernetes` installed on the master node, for example, `1.26.11`. The value of `crio_version` only applies to the nodes that are runnning `crio` runtime, instead of `containerd`.\n\nAfter updating the versions, run `ansible-playbook upgrade.yml -l <node> -t kubernetes`.\n\n#### Upgrade Ubuntu release\nPull the latest Ansible playbook repo and run `ansible-playbook upgrade.yml -l <node> -t dist-upgrade -e netbox_token=<your-netbox-token>`.\nNotice that release upgrade requires all installed packages to be the latest version. If it complaints, [upgrade all packages](#upgrade-all-packages) first.\n\n#### Upgrade above tasks at once\nPull the latest Ansible playbook repo and run `ansible-playbook upgrade.yml -l <node> -e netbox_token=<your-netbox-token>`."
+}

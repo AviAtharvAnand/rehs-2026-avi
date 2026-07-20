@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__fpgas__using-fpgas-from-pods__006",
+  "source_url": "https://nrp.ai/documentation/userdocs/fpgas/using-fpgas-from-pods/",
+  "title": "Using Fpgas From Pods",
+  "text": "**Q: Which Vivado/Vitis versions are installed?**\nA: Vivado **2021.2, 2023.1, 2023.2**; Vitis **2021.2, 2023.2** (no Vitis 2023.1). All under `/tools/Xilinx/`. Switch versions in the Coder template's `Vivado / Vitis version` parameter, or `source /tools/Xilinx/Vivado/<ver>/settings64.sh` by hand.\n\n## Before you request JTAG: read this\n\n:::caution[Only request `xilinx.com/fpga_jtag` if you actually intend to flash a card.]\nJTAG access is **not** for everyday FPGA use. Almost everything you'd want to do on a U55C — loading an `.xclbin`, running Vitis kernels, running an ESnet SmartNIC pipeline — goes through the **`amd.com/xilinx_u55c_gen3x16_xdma_base_3-0`** PCIe-side resource. You do **not** need JTAG for that.\n\nYou only need `xilinx.com/fpga_jtag` (or, for a serial console only, `smarter-devices/ttyUSB*`) when you actually need to:\n\n- reflash the card's base shell with `xbmgmt program --base`,\n- attach Vivado/`xsdb`/`hw_server`/OpenOCD to the JTAG TAP for debug,\n- read the on-card Satellite Controller (SC) over UART.\n\nWhy this matters:"
+}

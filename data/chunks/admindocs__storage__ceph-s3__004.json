@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__storage__ceph-s3__004",
+  "source_url": "https://nrp.ai/documentation/admindocs/storage/ceph-s3/",
+  "title": "Ceph S3",
+  "text": "##### Do the above and get the number of orphaned objects per orphaned bucket instance\n\n```bash\ncomm -23 \\\n  <(awk '{print $2}' buckets_numbers.txt | sort) \\\n  <(awk -F: '{print $2}' bucket_markers.txt | sort) \\\n  | grep -F -f - buckets_numbers.txt\n```\n\n##### Finding the total number of orphaned files\n\n```bash\ncomm -23 \\\n  <(awk '{print $2}' buckets_numbers.txt | sort) \\\n  <(awk -F: '{print $2}' bucket_markers.txt | sort) \\\n  | grep -F -f - buckets_numbers.txt \\\n  | awk '{for(i=1;i<=NF;i++) sum+=$i} END {print sum}'\n```\n\n##### For each missing marker, get the files in a separate file for review\n\n```bash\ngrep --binary-file=text <one_of_markers> rados.intermediate > <one_of_markers>.from.rados.intermediate\n```\n\n##### Check the object info directly from the data pool\n\n```bash\nrados -p nautiluss3.rgw.buckets.data stat object_id\n```\n\n##### Remove the orphaned files for one marker\n\n```bash\ncat <marker_from_above>.from.rados.intermediate | xargs -I{} -P16 rados rm -p nautiluss3.rgw.buckets.data \"{}\"\n```"
+}

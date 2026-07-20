@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__ai__accounting-mcp__005",
+  "source_url": "https://nrp.ai/documentation/userdocs/ai/accounting-mcp/",
+  "title": "Accounting Mcp",
+  "text": "Container and runtime details:\n\n- Image: `ghcr.io/djw8605/nrp-clickhouse:latest`\n- `imagePullPolicy: Always` is set to avoid stale cached images when using `latest`.\n- The OpenAPI bridge is launched with:\n\n```bash\nmcpo --host 0.0.0.0 --port 8000 --root-path /openapi --api-key \"$MCPO_API_KEY\" -- python -m nrp_accounting_pipeline.mcp_server\n```\n\nRequired secret and config values:\n\n- `CLICKHOUSE_HOST`\n- `CLICKHOUSE_USER`\n- `CLICKHOUSE_PASSWORD`\n- `MCPO_API_KEY`\n- `MCP_ALLOWED_HOSTS`\n- `MCP_ALLOWED_ORIGINS`\n\nAdmin notes:\n\n- If the ingress hostname changes, update both the ingress host and the MCP allowed host/origin settings or the server will return `421 Invalid Host header`.\n- If Open WebUI returns `401 Missing or invalid Authorization header`, configure its OpenAPI tool server with the Bearer token from `MCPO_API_KEY`.\n- If a client gets empty results for `gpu-hours`, query `resource=gpu` instead. Aliases are normalized automatically, but canonical resource names are still preferred.\n\n</details>"
+}

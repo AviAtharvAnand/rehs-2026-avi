@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__storage__ceph__006",
+  "source_url": "https://nrp.ai/documentation/userdocs/storage/ceph/",
+  "title": "Ceph",
+  "text": "Ceph shared filesystem ([**CephFS**](https://docs.ceph.com/en/latest/cephfs/)) is the primary way of storing data in nautilus and allows mounting same volumes from multiple PODs in parallel (*ReadWriteMany*).\n\nCeph block storage allows [**RBD** (Rados Block Devices)](https://docs.ceph.com/docs/master/rbd/) to be attached to a **single pod** at a time (*ReadWriteOnce*). Provides fastest access to the data, and **is preferred for all datasets not needing shared access from multiple pods**.\n\n## UCSD NVMe CephFS filesystem policy\n\n:::caution\n**This policy applies to the `rook-cephfs-ucsd` storageclass**\n:::\n\nThe filesystem is very fast and small. We expect all data on it to be used for currently running computation and then promptly deleted. We reserve the right to purge any data that's staying there longer than needed at admin's discretion without any notifications."
+}

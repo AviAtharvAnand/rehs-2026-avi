@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__cluster__gitlab__003",
+  "source_url": "https://nrp.ai/documentation/admindocs/cluster/gitlab/",
+  "title": "Gitlab",
+  "text": "---\n\n## Verify\n\n```bash\nvirtctl ssh ubuntu@runner1 -n gitlab -- sudo gitlab-runner status\nvirtctl ssh ubuntu@runner2 -n gitlab -- sudo gitlab-runner status\n# Both: executor=docker, image=docker:dind, tag_list=[\"docker\"], S3 cache in config.toml\n```\n\nSSH (after `ssh-add` your key or use password): `virtctl ssh ubuntu@runner1 -n gitlab` / `virtctl ssh ubuntu@runner2 -n gitlab`."
+}

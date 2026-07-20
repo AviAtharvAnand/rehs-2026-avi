@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__cluster__sense-multus__003",
+  "source_url": "https://nrp.ai/documentation/admindocs/cluster/sense-multus/",
+  "title": "Sense Multus",
+  "text": "Apply it:\n\n```bash\nkubectl apply -f network.yaml\n```\n\n## Step 4: Create a Pod\nDeploy a pod using the network. Save the following YAML as `pod.yaml`:\n\n```yaml\napiVersion: v1\nkind: Pod\nmetadata:\n  name: macvlan-pod\n  namespace: <namespace>\n  annotations:\n    k8s.v1.cni.cncf.io/networks: macvlan-network\nspec:\n  containers:\n  - name: test-container\n    image: alpine\n    command: [\"sh\", \"-c\", \"sleep 3600\"]\n    resources:\n      limits:\n        memory: \"256Mi\"\n        cpu: \"500m\"\n      requests:\n        memory: \"128Mi\"\n        cpu: \"250m\"\n```\n\nApply it:\n\n```bash\nkubectl apply -f pod.yaml\n```\n\n## Step 5: Verify Connectivity\n1. Exec into the pod:\n\n```bash\nkubectl exec -it macvlan-pod -n <namespace> -- sh\n```\n\n2. Test connectivity using `ping`, `iperf` or other tools."
+}

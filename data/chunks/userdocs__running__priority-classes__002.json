@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__priority-classes__002",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/priority-classes/",
+  "title": "Priority Classes",
+  "text": "The pod can be preempted by any other pod in the cluster, so checkpoint frequently or run it as a\n[Job](/documentation/userdocs/running/jobs/) so the controller can restart it.\n\n`opportunistic2` is the same idea but sits one step above `opportunistic` in priority — useful only if you don't want\nto be preempted by *other* opportunistic workloads.\n\n## If your pod is rejected\n\n`pods \"...\" is forbidden: exceeded quota: high-priority-ban` or `low-priority-ban` means your `priorityClassName` is on\nthe ban list. Drop the field or switch to one of the allowed classes above."
+}

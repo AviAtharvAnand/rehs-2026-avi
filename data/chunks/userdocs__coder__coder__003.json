@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__coder__coder__003",
+  "source_url": "https://nrp.ai/documentation/userdocs/coder/coder/",
+  "title": "Coder",
+  "text": "### 6. Other Environments\nAdditional images are available for various development needs, such as Node.js, RStudio, and Golang.\n\n## Workspace Management\nAfter setting up a workspace, you can always adjust configurations later through the settings menu.\n\n**Important**: Deleting any workspace also deletes its associated Persistent Volume Claim (PVC), so be sure to backup any critical data.\n\n\n### Git Integration\nAll workspaces come preconfigured with an SSH key, available in your user settings, simplifying connections to GitLab. This makes backing up code a straightforward task.\n\n---\n\nFor further assistance, feel free to contact the Nautilus Support team."
+}

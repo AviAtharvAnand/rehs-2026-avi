@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__cluster__cluster-user-mgmt__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/cluster/cluster-user-mgmt/",
+  "title": "Cluster User Mgmt",
+  "text": "---\ntitle: Cluster User Management\ndescription: Managing users in the cluster.\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n# Managing User Roles\n\nThis document outlines the steps to manage user roles and permissions within the platform.\n\n## Add a User to a Namespace\n\nNow implemented directly in website. Namespace membership corresponds to an Authentik group for the namespace.\n\n## Promote a User to Admin\n\nNow implemented directly in website. Adminship corresponds to an Authentik group \"namespace admins\".\n\n## Demote an Admin to User\n\nNow implemented directly in website. Adminship corresponds to an Authentik group \"namespace admins\"."
+}

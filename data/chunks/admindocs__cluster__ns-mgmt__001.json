@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__cluster__ns-mgmt__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/cluster/ns-mgmt/",
+  "title": "Ns Mgmt",
+  "text": "---\ntitle: Namespace Management\ndescription: Managing namespaces inlcuding creating and deleting namespaces in the cluster.\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\nimport Image from '~/components/common/Image.astro';\n\n\n# Managing Namespaces\n\nThis document outlines the steps to manage Kubernetes namespaces within the platform.\n\n## Create a Namesapce\n\nUse the website, and fill out the details in the form.\n\n:::caution\nDo **not** use `kubectl create namespace`.\n:::\n\n## Delete a Namespace\n\n1. If it has children (subgroups), move them to parent in **Authentik**.\n2. Delete from the website (NOT AUTHENTIK).\n3. Remove any exceptions in the portal configuration and any Gatekeeper exceptions. \n\n:::danger\nThe website uses a cached version of authentik groups. Changed in Authentik directly will have users see old cache until portal refreshes cache.\n:::\n\n:::caution\nThere's an Authentik bug. If you edit a group and save, you have to re-enter the parent, otherwise the group gets orphaned. \n:::"
+}

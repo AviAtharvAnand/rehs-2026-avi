@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__cluster__jupyterlab-admin__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/cluster/jupyterlab-admin/",
+  "title": "Jupyterlab Admin",
+  "text": "---\ntitle: JupyterLab Admin\ndescription: JupyterLab administration guide.\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n\n## Adding a User to JupyterLab\n\nTo grant access to the [JupyterLab](https://jupyterhub-west.nrp-nautilus.io) service, first verify the user's email address used for CILogon.\n\nAdd the email to the `allowed_users:` section in the [configuration template](https://gitlab.nrp-nautilus.io/prp/jupyterlab-west/-/blob/master/values.template.yaml) and commit the change."
+}

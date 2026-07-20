@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__long-idle__002",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/long-idle/",
+  "title": "Long Idle",
+  "text": "## Quickly stopping and starting the pod\n\nIf you need a simple way to start and stop your pod without redeploying every time, you can scale down the deployment. This will leave the definition, but delete the pod.\n\nTo stop the pod, scale down:\n\n```\nkubectl scale deployment deployment-name --replicas=0\n```\n\nTo start the pod, scale up:\n\n```\nkubectl scale deployment deployment-name --replicas=1\n```"
+}

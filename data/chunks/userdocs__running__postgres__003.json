@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__postgres__003",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/postgres/",
+  "title": "Postgres",
+  "text": "```bash\nNAME                TEAM   VERSION   STATUS    INSTANCES   AGE\nmy-postgres-cluster my-team 14       Running   3           5m\n```\n\n### 4. Choosing the storage for the cluster\n\nLinstor storageClass is preferred as it provides the best performance for postgres. Refer to [linstor storage docs](/documentation/userdocs/storage/linstor/). Example of adding the linstor storage:\n\n```yaml\nvolume:\n    size: 10Gi\n    storageClass: linstor-igrok\n```\n\nThis is how you can manage and deploy a PostgreSQL cluster using the Zalando Postgres Operator in Kubernetes. For more advanced configurations, refer to the [full documentation of the operator](https://postgres-operator.readthedocs.io/en/latest/user/)."
+}

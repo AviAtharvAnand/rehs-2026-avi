@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__links__software__002",
+  "source_url": "https://nrp.ai/documentation/admindocs/links/software/",
+  "title": "Software",
+  "text": "[submariner]: https://rancher.com/blog/2019/announcing-submariner-multi-cluster-kubernetes-networking/\n[cilium]: https://cilium.io/blog/2018/12/10/cilium-14-preview/ \n[admiralty]: https://admiralty.io/\n\n[gridftp]: https://fasterdata.es.net/data-transfer-tools/gridftp/\n[esmond]: http://software.es.net/esmond/perfsonar_gridftp.html\n[esnetlinks]: https://software.es.net\n[esnet-cli]: https://fasterdata.es.net/data-transfer-tools/other/\n\n[swipe]: https://swipesforscience.org"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__upgrades__rook__009",
+  "source_url": "https://nrp.ai/documentation/admindocs/upgrades/rook/",
+  "title": "Rook",
+  "text": "Every result should be `yes`. If any result is `no`, regenerate and apply that namespace's target-version `common-second-cluster.yaml`. Do not give `cluster-admin` to the operator, fix the missing namespace RBAC instead.\n\n```bash\nkubectl get cephcluster -A \\\n  -o custom-columns='NAMESPACE:.metadata.namespace,NAME:.metadata.name,EXTERNAL:.spec.external.enable,IMAGE:.spec.cephVersion.image,HEALTH:.status.ceph.health'\n```\n\nAfter the operator starts, it reconciles CephClusters one at a time. If one namespace is stuck, the others can wait behind it. Watch the operator logs if any cluster does not return to `HEALTH_OK`:\n\n```bash\nkubectl -n rook-system logs deploy/rook-ceph-operator -f | grep -E \"ERROR|WARN|reconcile\"\n```"
+}

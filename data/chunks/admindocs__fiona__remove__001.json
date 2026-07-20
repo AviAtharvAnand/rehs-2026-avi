@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__fiona__remove__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/fiona/remove/",
+  "title": "Remove",
+  "text": "---\ntitle: Removing a node\ndescription: Removing a node from the cluster\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\nimport { Steps } from '@astrojs/starlight/components';\n\n:::note\nThese instructions are for nodes being temporary or permanently removed from the cluster.\n:::\n\n<Steps>\n\n    1. Drain the node. **Check all pods except the system ones are gone**.\n\n    2. Check that all storage volumes are successfully unmounted from the node (both `lsblk` devices and k8s volumeattachments)\n\n    3. Check **in linstor controller pod** that [no linstor volumes exist on the node (even diskless ones)](/documentation/admindocs/storage/linstor/#cleaning-up-a-node).\n\n    4. Do `kubeadm reset` on the node\n\n    5. Delete the node from the k8s cluster\n\n    6. Delete the node from ansible inventory\n\n    7. Add a note to netbox\n</Steps>"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__upgrades__kubevirt__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/upgrades/kubevirt/",
+  "title": "Kubevirt",
+  "text": "---\ntitle: KubeVirt\ndescription: KubeVirt\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n`kubectl apply -f https://github.com/kubevirt/kubevirt/releases/download/<version>/kubevirt-operator.yaml`"
+}

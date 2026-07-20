@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__fpgas__using-fpgas-from-pods__001",
+  "source_url": "https://nrp.ai/documentation/userdocs/fpgas/using-fpgas-from-pods/",
+  "title": "Using Fpgas From Pods",
+  "text": "---\ntitle: Requesting FPGAs and JTAG from a Pod\ndescription: How to write a Pod spec that requests an Alveo U55C card and its USB JTAG cable, and how to identify the right pair at runtime.\n---\n\nThis page covers raw-Kubernetes usage. If you want a turnkey environment with Vivado/Vitis pre-installed, see [AMD/Xilinx FPGAs in Coder](/documentation/userdocs/fpgas/vivado-vitis) — it spins up a pod from a template that already has the right resource requests.\n\n## Which workflow do you want?\n\nThere are three common ways to get an FPGA on NRP. Pick the one that matches what you're trying to do:"
+}

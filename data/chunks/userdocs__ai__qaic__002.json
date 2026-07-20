@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__ai__qaic__002",
+  "source_url": "https://nrp.ai/documentation/userdocs/ai/qaic/",
+  "title": "Qaic",
+  "text": "An in-house Docker image has been built with the latest SDK and vLLM support, optimized for the Qualcomm Cloud AI 100 Ultra cards.\n\n**Docker Image:** `gitlab-registry.nrp-nautilus.io/cloud-ai-100/qaic-docker-images:vllm-latest`\n\nThis image includes all necessary tools and libraries to efficiently utilize the Qualcomm accelerators.\n\n## Additional Resources\n\nFor more detailed instructions on installation and performance tuning, please refer to the official Qualcomm documentation:\n- [Qualcomm Cloud AI SDK vLLM Documentation](https://quic.github.io/cloud-ai-sdk-pages/latest/Getting-Started/Installation/vLLM/vLLM/)\n- [Efficient Transformers Documentation](https://quic.github.io/efficient-transformers)"
+}

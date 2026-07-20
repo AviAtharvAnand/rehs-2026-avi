@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__tutorial__debugging__001",
+  "source_url": "https://nrp.ai/documentation/userdocs/tutorial/debugging/",
+  "title": "Debugging",
+  "text": "---\ntitle: Debugging\ndescription: Debugging\n---\n\n# Debugging\n\nNo one writes perfect code or executes scripts without failures or errors. Understanding how to diagnose and fix these roadblocks is an important skill. Because Nautilus is highly complex and Kubernetes requires additional skills, this page is written to help you understand some basic steps you can use for debugging.\n\n\n\nDiagnosing and fixing errors in Kubernetes differs from troubleshooting issues on a physical machine in several key ways due to the distributed and dynamic nature of containerized environments.  Here are some notable differences:"
+}

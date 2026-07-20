@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__upgrades__postgres-operator__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/upgrades/postgres-operator/",
+  "title": "Postgres Operator",
+  "text": "---\ntitle: Postgres operator\ndescription: Zalando Postgres operator\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n#### Upgrading Zalando Postgres operator\n\nInstructions: https://postgres-operator.readthedocs.io/en/latest/administrator/#upgrading-the-operator\n\n```\nkubectl apply -f https://raw.githubusercontent.com/zalando/postgres-operator/v1.9.0/charts/postgres-operator/crds/operatorconfigurations.yaml\nkubectl apply -f https://raw.githubusercontent.com/zalando/postgres-operator/v1.9.0/charts/postgres-operator/crds/postgresqls.yaml\nkubectl apply -f https://raw.githubusercontent.com/zalando/postgres-operator/v1.9.0/charts/postgres-operator/crds/postgresteams.yaml\n```\n\n```\nhelm upgrade -n postgres-operator postgres-operator postgres-operator-charts/postgres-operator\n```"
+}

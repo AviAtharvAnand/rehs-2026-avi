@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__jobs__005",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/jobs/",
+  "title": "Jobs",
+  "text": "```\n\nYou can use several Work Queue Brokers, like Redis or RabbitMQ, to distribute tasks once you're ready to scale out your computation. \n\n[1]: https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/\n[2]: https://docs.gitlab.com/ce/user/project/repository/web_editor.html\n[3]: https://gitlab.nrp-nautilus.io\n[4]: https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html\n[5]: https://help.github.com/en/articles/creating-a-personal-access-token-for-the-command-line"
+}

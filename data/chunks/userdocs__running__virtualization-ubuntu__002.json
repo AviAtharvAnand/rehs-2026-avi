@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__virtualization-ubuntu__002",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/virtualization-ubuntu/",
+  "title": "Virtualization Ubuntu",
+  "text": "You also need to create the secret with your SSH key to login with:\n\n```yaml\napiVersion: v1\ndata:\n  key1: <base64-encoded key>\nkind: Secret\nmetadata:\n  name: pub-keys\ntype: Opaque\n```\n\nUse [virtctl](https://kubevirt.io/user-guide/operations/virtctl_client_tool/) to start the VM:\n\n```bash\nvirtctl start myvm\n```\n\nOpen VNC or SSH:\n\n```bash\nvirtctl vnc myvm\nvirtctl ssh ubuntu@myvm\n```\n\n## Example of an ubuntu vm with large local disk on linstor"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__jupyter__jupyter-pod__003",
+  "source_url": "https://nrp.ai/documentation/userdocs/jupyter/jupyter-pod/",
+  "title": "Jupyter Pod",
+  "text": "1. **Login into your tensorflow pod** <br>\n    If the ```kubectl get pods``` command lists the pod's status as \"Running\", run the ```kubectl``` command listed below. In the command, the **-i** flag asks for bash to be executed interactively and **-t** flag allocates an access to a terminal.\n    That is to say you want to have an interactive shell login on your pod.\n\n        kubectl exec -it gpu-pod-example -- bash\n\n    A successful execution should result in the output similar to:\n\n        To run a command as administrator (user \"root\"), use \"sudo <command>\".\n        See \"man sudo_root\" for details.\n        jovyan@gpu-pod-example:~$\n\n    **At this point you can already run some code from command line. Keep reading if you want jupyter GUI interface.**\n\n    (If you stop here, don't forget to [tear down](#step4) from step 4)\n\n### <a name=\"step3\"></a>Step 3: Run Jupyter notebook\n\n1. **Start Jupyter notebook**<br>\n    In the newly running bash prompt running on the nautilus kubernetes container:\n\n        jovyan@gpu-pod-example:~$ jupyter notebook --ip='0.0.0.0'\n\n    You should see the output similar to:"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__cluster__gitlab__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/cluster/gitlab/",
+  "title": "Gitlab",
+  "text": "---\ntitle: GitLab Runners\ndescription: A Cluster Admin Guide Running Gitlab CI/CD Runners\n---\n\n# Restore GitLab Runner KubeVirt VMs (docker:dind, docker tag)\n\nMinimal guide for the production GitLab runners: **docker** executor, **docker:dind** image, **docker** tag. The docker-tagged runners are KubeVirt VMs not Kubernetes Pods. The configuration for each VM is in a secret in the namespace. Duplicate and get a new runner token from Gitlab for new secret. Duplicate runner DataVolume before applying VM.\n\n### Running a Runner VM"
+}

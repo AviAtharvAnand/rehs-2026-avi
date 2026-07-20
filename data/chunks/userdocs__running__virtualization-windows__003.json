@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__virtualization-windows__003",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/virtualization-windows/",
+  "title": "Virtualization Windows",
+  "text": ":::note\n    \n  The usb tablet input and sound device are required for proper audio and mouse tracking\n\n:::\n\nNow, install virtctl: \n<https://github.com/kubevirt/kubevirt/releases/tag/v0.42.1>\n\nThen start it:\n\n`virtctl start winvm`\n\nAfter that you should be able to connect to it using vnc: `virtctl vnc winvm` after instaling one of VNC apps on mac:\n\n<https://github.com/kubevirt/kubevirt/blob/master/pkg/virtctl/vnc/vnc.go#L223>\n\n<https://kubevirt.io/user-guide/#/usage/graphical-and-console-access>\n\n## Our main example"
+}

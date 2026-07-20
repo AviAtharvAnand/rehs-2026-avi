@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__cluster__authentik__003",
+  "source_url": "https://nrp.ai/documentation/admindocs/cluster/authentik/",
+  "title": "Authentik",
+  "text": "More details on Expression Policies: [Authentik Docs](https://docs.goauthentik.io/docs/customize/policies/expression)\n\n:::note\n  There's no need to add banned users to expression policies. They are banned by default.\n:::\n\nFor now, finish creating the **Application** without attaching a policy. Next, you'll create the policy and bind it.\n\n## Step 4: Create an Expression Policy (Optional)\n\n- Navigate to **Customization → Policies → Create → Expression Policy**.\n- In the **Expression** field, enter your filtering logic.\n  \n:::note\n  If it's a public service, there is a standard expression policy that enforces users be part of at least one Authentik group and/or Kubernetes namespace.\n:::\n\n\n## Step 5: Bind the Policy to Your Application (Optional)\n\n- Go back to your **Application**.\n- Open **Policy / Group / User Bindings**.\n- Bind the **Expression Policy** you just created.\n- In the **Application Overview**, use the **Test** button to verify user access.\n\n---"
+}

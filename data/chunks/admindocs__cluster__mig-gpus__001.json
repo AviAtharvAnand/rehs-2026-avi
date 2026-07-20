@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__cluster__mig-gpus__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/cluster/mig-gpus/",
+  "title": "Mig Gpus",
+  "text": "---\ntitle: MIG GPUs\ndescription: Managing MIG GPUs in the cluster.\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n1. Drain the node.\n\n2. Run the command to convert **ALL** GPUs to MIGs:\n\n```bash\nsudo nvidia-smi -mig 1\n```\n\n3. Install `nvidia-mig-parted` on the node.\n\n4. Install `nvidia-mig-manager` on the node. You can find the installation details [here](https://github.com/NVIDIA/mig-parted/tree/main/deployments/systemd).\n\n5. Create a `config.yaml` file for the node and place it in **/etc/nvidia-mig-manager/config.yaml**. Example:\n\n```yaml\nversion: v1\nmig-configs:\n  current:\n  - devices: all\n    mig-enabled: true\n    mig-devices:\n      1g.10gb: 7\n  all-disabled:\n  - devices: all\n    mig-enabled: true\n    mig-devices:\n      1g.10gb: 7\n```\n\nYou can also SSH into an existing MIG node and run `sudo nvidia-mig-parted export`.\n\n6. Test persistence with reboots to ensure MIG settings are retained.\n\n7. Don't forget to **uncordon** the node."
+}

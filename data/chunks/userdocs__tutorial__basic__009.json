@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__tutorial__basic__009",
+  "source_url": "https://nrp.ai/documentation/userdocs/tutorial/basic/",
+  "title": "Basic",
+  "text": ":::note[Question?]\nExamining the [`dep1.yaml`](#deployment-1) example above, what would you change to specify a different image? Keep that in mind as we progress through the tutorials. If you are curious and want to read ahead, we cover that topic in the section called \"[Images](/documentation/userdocs/tutorial/images)\".\n:::\n\nLet’s now delete the deployment:\n\n```bash\nkubectl delete -f dep1.yaml\n```\n\nVerify everything is gone:\n\n```bash\nkubectl get deployments\nkubectl get pods\n```\n\n## Next steps\n\nIn the next [tutorial](../basic2), we will explore how to run a simple web server in a pod, and how to expose it to the outside world and scale it."
+}

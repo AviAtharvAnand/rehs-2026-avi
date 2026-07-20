@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__jupyter__values__005",
+  "source_url": "https://nrp.ai/documentation/userdocs/jupyter/values/",
+  "title": "Values",
+  "text": "scheduling:\n  userScheduler:\n    enabled: false\n  userPlaceholder:\n    enabled: false\n# prePuller relates to the hook|continuous-image-puller DaemonsSets\nprePuller:\n  hook:\n    enabled: false\n  continuous:\n    enabled: false\n\n# This will be deprecated soon, httpRoute sufficies, can set enabled: false\ningress:\n  enabled: true\n  ingressClassName: haproxy\n  hosts: [\"your_name.nrp-nautilus.io\"]\n  pathSuffix: ''\n  tls:\n    - hosts:\n      - your_name.nrp-nautilus.io\n\nhttpRoute:\n  enabled: true\n  hostnames:\n    - your_name.nrp-nautilus.io\n  gateway:\n    name: ingress\n    namespace: haproxy\n\ncull:\n  enabled: true\n  users: false\n  removeNamedServers: false\n  timeout: 3600\n  every: 600\n  concurrency: 10\n  maxAge: 0\n```"
+}

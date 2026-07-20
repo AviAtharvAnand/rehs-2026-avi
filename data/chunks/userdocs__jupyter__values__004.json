@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__jupyter__values__004",
+  "source_url": "https://nrp.ai/documentation/userdocs/jupyter/values/",
+  "title": "Values",
+  "text": "- display_name: B-Data python scipy\n    kubespawner_override:\n      image_spec: glcr.b-data.ch/jupyterlab/cuda/python/scipy:3\n  - display_name: B-Data Julia\n    kubespawner_override:\n      image_spec: glcr.b-data.ch/jupyterlab/cuda/julia/base:1\n  - display_name: B-Data R\n    kubespawner_override:\n      image_spec: glcr.b-data.ch/jupyterlab/cuda/r/base:4\n  - display_name: B-Data R tidyverse\n    kubespawner_override:\n      image_spec: glcr.b-data.ch/jupyterlab/cuda/r/tidyverse:4\n  - display_name: B-Data R verse\n    kubespawner_override:\n      image_spec: glcr.b-data.ch/jupyterlab/cuda/r/verse:4\n  - display_name: B-Data R geospatial\n    kubespawner_override:\n      image_spec: glcr.b-data.ch/jupyterlab/cuda/r/geospatial:4\n  - display_name: B-Data R qgisprocess\n    kubespawner_override:\n      image_spec: glcr.b-data.ch/jupyterlab/cuda/r/qgisprocess:4"
+}

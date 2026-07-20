@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__fpgas__esnet__001",
+  "source_url": "https://nrp.ai/documentation/userdocs/fpgas/esnet/",
+  "title": "Esnet",
+  "text": "---\ntitle: ESnet SmartNIC\ndescription: ESnet SmartNIC\n---\n\n## ESnet SmartNIC Tools on Coder\n\nThe **ESnet FPGA SmartNIC template** enables the utilization of Xilinx Alveo FPGAs as SmartNICs, integrating seamlessly within the ESnet framework. This setup allows for high-performance networking tailored for scientific research.\n\n### Overview of the ESnet SmartNIC Framework\n\nThe ESnet SmartNIC framework provides a complete workflow for programming AMD/Xilinx Alveo FPGA cards using **P4**. This open-source framework simplifies the integration of AMD/Xilinx tools and DPDK, facilitating easy programming of Alveo cards as SmartNICs.\n\n### Workflows\n\n1. **Development Workflow**: Compile your P4 programs into bitfiles using licensed Xilinx tools.\n2. **Deployment Workflow**: Load the generated bitfiles onto Alveo cards for experimental use.\n\nBy following these workflows, you can effectively harness the capabilities of Alveo FPGAs within a high-performance networking environment.\n\nPlease continue to our tutorial: [ESnet SmartNIC Tutorial](/documentation/userdocs/fpgas/esnet_development)."
+}

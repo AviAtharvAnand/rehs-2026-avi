@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__gpu-pods__004",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/gpu-pods/",
+  "title": "Gpu Pods",
+  "text": "We have a variety of GPU flavors attached to Nautilus. This table describes the types of GPUs available for use, but is not up to date - it's better to use the actual cluster information (f.e. `kubectl get nodes -L nvidia.com/gpu.product`).\n\n<div id=\"observablehq-chart-35acf314\"></div>\n<p>Credit: <a href=\"https://observablehq.com/d/7c0f46855b4212e0\">GPU types by NRP Nautilus</a></p>\n\n<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@observablehq/inspector@5/dist/inspector.css\">\n<script type=\"module\">\nimport {Runtime, Inspector} from \"https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js\";\nimport define from \"https://api.observablehq.com/d/7c0f46855b4212e0.js?v=4\";\nnew Runtime().module(define, name => {\n  if (name === \"chart\") return new Inspector(document.querySelector(\"#observablehq-chart-35acf314\"));\n});\n</script>\n\nIf you need more graphical memory, use this table or official specs to choose the type:"
+}

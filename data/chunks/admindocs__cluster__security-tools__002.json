@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__cluster__security-tools__002",
+  "source_url": "https://nrp.ai/documentation/admindocs/cluster/security-tools/",
+  "title": "Security Tools",
+  "text": "\\* Cluster admins have access to the username/password if they are stored as secretes in correstponding namespaces.\n\n## Applications\n\n### 1. IPMI port scanner\n\nNRP scans all nodes' IPMI address periodically, and notifies site admins if the port is accessible from outside of the gateway.\n\n### 2. JupyterHub security scanner\n\nNRP scans all JupyterHub instances created by users, and make sure that they limit access to institutional accounts, and don't allow anonymous users."
+}

@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__ai__llm-managed__003",
+  "source_url": "https://nrp.ai/documentation/userdocs/ai/llm-managed/",
+  "title": "Llm Managed",
+  "text": "<CardGrid>\n  <LinkCard\n    title=\"Fair use policy\"\n    href=\"/documentation/userdocs/ai/llm-managed/fair-use\"\n    description=\"Per-model concurrency limits and retry guidance\" />\n  <LinkCard\n    title=\"Live LLM status\"\n    href=\"/llm-status\"\n    description=\"Live deployment health from Prometheus / vLLM\" />\n</CardGrid>\n\n## Deploy your own model\n\nIf the managed catalog doesn't fit your need, the NRP supports running your own LLM via vLLM or SGLang. See [Managing AI Models](/documentation/admindocs/ai/managing_models/) for the deployment path."
+}

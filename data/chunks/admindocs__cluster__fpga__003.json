@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__cluster__fpga__003",
+  "source_url": "https://nrp.ai/documentation/admindocs/cluster/fpga/",
+  "title": "Fpga",
+  "text": "| `k8s-stratix-10-02.sdsc.optiputer.net` | 7     | 2.16.204                   | `xilinx_u55c_gen3x16_xdma_base_3`      | joined to cluster on 2026-06-03                                                      |\n| `prp-gpu-2.t2.ucsd.edu`                | 6     | **2.19.194 (2025.1)**      | `xilinx_u55c_gen3x16_xdma_base_3`      | Ubuntu **24.04** / kernel **6.8** — must use XRT 2024.x+; older XRT will not build   |\n| `k8s-stratix-10-01.sdsc.optiputer.net` | —     | —                          | —                                      | **OFFLINE** as of writing — likely holds the 9 unaccounted-for cards from the inventory |"
+}

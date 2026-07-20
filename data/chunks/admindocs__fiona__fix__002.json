@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__fiona__fix__002",
+  "source_url": "https://nrp.ai/documentation/admindocs/fiona/fix/",
+  "title": "Fix",
+  "text": "1. Fix the issue\n\n</Steps>\n\n## When the issue is fixed\n\n<Steps>\n\n    1. [Verify the node connectivity](/documentation/admindocs/fiona/install/#verifying-the-connectivity)\n\n    2. If spegel was diabled, put back the config for it and restart containerd:\n\n        ```yaml title=/etc/containerd/config.toml\n            [plugins.\"io.containerd.grpc.v1.cri\".registry]\n              config_path = \"/etc/containerd/certs.d\"\n        ```\n\n    3. Close the issue in gitlab and *untaint the node*\n\n    4. Check that all pods are running on the node without issues\n\n</Steps>"
+}

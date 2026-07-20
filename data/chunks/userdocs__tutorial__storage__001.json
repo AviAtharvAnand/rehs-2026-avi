@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__tutorial__storage__001",
+  "source_url": "https://nrp.ai/documentation/userdocs/tutorial/storage/",
+  "title": "Storage",
+  "text": "---\ntitle: Storage\ndescription: Storage\n---\n\n# Storage\n\n\n\nIn Kubernetes, a Persistent Volume Claim (PVC) is a resource that allows a user to request storage from a storage class defined in the cluster. StorageClasses enable the cluster to abstract the details of storage provisioning and management, allowing users to request storage without needing to know the specifics of the underlying infrastructure.\n\n## Prerequisites\n\nThis section builds on skills from the tutorial on [Basic Kubernetes](/documentation/userdocs/tutorial/basic). You will need a basic understanding of Kubernetes concepts such as Pods, Persistent Volume Claims (PVCs), and Persistent Volumes (PVs).\n\n## Learning objectives\n\n1. You will have a basic understanding of storage types in Kubernetes.\n2. By completing this lesson, you will understand how to request a persistent volume claim (PVC).\n3. You will understand how to connect your PVC to another pod and make it available to your software container.\n\n## Storage Types\n\n\nIn a Kubernetes cluster, there are several types of storage options available to manage data persistence for applications and services:"
+}

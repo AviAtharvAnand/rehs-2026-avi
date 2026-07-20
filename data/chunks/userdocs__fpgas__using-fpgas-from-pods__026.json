@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__fpgas__using-fpgas-from-pods__026",
+  "source_url": "https://nrp.ai/documentation/userdocs/fpgas/using-fpgas-from-pods/",
+  "title": "Using Fpgas From Pods",
+  "text": "### Vivado crashes mid-synthesis with `realloc(): invalid pointer`\n\nKnown containerisation issue. Try the `LD_LIBRARY_PATH` workaround (see [Vivado containerisation](#vivado-doesnt-love-being-containerised--known-workarounds)). If that doesn't help, run Vivado in a [KubeVirt VM](/documentation/userdocs/running/virtualization-ubuntu/) instead of a pod.\n\n## Why is the model like this?\n\n`amd.com/xilinx_u55c_gen3x16_xdma_base_3-0` is registered by AMD's [k8s-device-plugin](https://github.com/Xilinx/FPGA_as_a_Service/tree/master/k8s-device-plugin) running as the `xilinx-device-plugin-daemonset` DaemonSet. `xilinx.com/fpga_jtag` is registered by KubeVirt's `virt-handler` based on the cluster's `KubeVirt` CR `permittedHostDevices.usb` config (which currently matches any FTDI FT4232H — vendor `0403`, product `6011`). The two services discover hardware independently and have no shared notion of \"this USB device belongs to this PCIe device.\" That's why the matching has to be done by the pod itself — usually trivially, because sysfs gives you both serials."
+}

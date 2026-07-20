@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__federation__004",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/federation/",
+  "title": "Federation",
+  "text": "```bash\nkubectl apply -f test-pod.yaml\n```\n\n#### Check if the proxy and delegate pods are running on source and target cluster respectively\n\n```bash\n#proxy pod\nkubectl --context=<your-cluster-context> get pods\nNAME         READY   STATUS    RESTARTS   AGE\ntest-pod      1/1     Running   0          20m\n```\n\n```bash\n#delegate pod\nkubectl --context=nautilus get pods\nNAME               READY   STATUS    RESTARTS   AGE\ntest-pod-stdhg     1/1     Running   0          15m\n```"
+}

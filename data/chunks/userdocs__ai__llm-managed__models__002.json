@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__ai__llm-managed__models__002",
+  "source_url": "https://nrp.ai/documentation/userdocs/ai/llm-managed/models/",
+  "title": "Models",
+  "text": "<style>{`\n  .badge-legend {\n    margin-block: 1rem 2rem;\n    padding: 0.75rem 1rem;\n    background: var(--sl-color-gray-6);\n    border-radius: 0.4rem;\n    font-size: 0.875rem;\n  }\n  .badge-legend-row {\n    margin: 0.35rem 0;\n  }\n`}</style>\n\nIf your group needs a model marked for active research (so removal is communicated rather than automatic), please reach out via the [Nautilus AI/ML channel in Natilus Support](/contact). New-model suggestions are also discussed there.\n\n## Generally supported\n\n{main.map((m) => <ModelCard model={m} />)}\n\n## Evaluating\n\n{evaluating.map((m) => <ModelCard model={m} />)}"
+}

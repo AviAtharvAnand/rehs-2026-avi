@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__coder__deploy__004",
+  "source_url": "https://nrp.ai/documentation/userdocs/coder/deploy/",
+  "title": "Deploy",
+  "text": "For OAuth integration, uncomment and configure the OAuth settings as needed.\n\n---\n\n### 8. Deploy Coder\n\nUse Helm to deploy Coder:\n\n```bash\nhelm install coder coder-v2/coder \\\n    --namespace your_namespace \\\n    --values values.yaml \\\n    --version 2.15.1\n```\n\n---\n\n### 9. Log in to Coder 🎉\n\nVisit `https://your_name.nrp-nautilus.io` to access your Coder instance.\n\n---\n\n### 10. Add Custom Templates\n\nYou can add your own templates or use the examples we have at [NRP Coder Templates](https://gitlab.nrp-nautilus.io/prp/coder-templates).\n\n\n:::note\nFor better support, debugging, and faster turnaround when issues arise, we **strongly recommend adding the NRP admins as admins in your Coder instance** when deploying or customizing Coder.\n\nPlease include the following admin users:\n- `mfsada@ucsd.edu`\n- `d4diaz@ucsd.edu`\n- `dmishin@ucsd.edu`\n\nGranting admin access enables NRP administrators to inspect Coder from within and provide effective assistance via the NRP support channels.\n:::\n\n\n---\n\nYou're all set to use your customized Coder instance!"
+}

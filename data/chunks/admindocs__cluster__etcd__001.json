@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__cluster__etcd__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/cluster/etcd/",
+  "title": "Etcd",
+  "text": "---\ntitle: Etcd purging\ndescription: Purging etcd database when it exceeds the limit.\n---\n\nMake sure the etcd size fits the one in `/etc/kubernetes/manifests/etcd.yaml`, quota-backend-bytes (5GB).\n\n`nerdctl run --rm --network host     -v /etc/kubernetes/pki/etcd:/etc/kubernetes/pki/etcd:ro     --env ETCDCTL_API=3     k8s.gcr.io/etcd:3.5.6-0     etcdctl --endpoints=https://127.0.0.1:2379     --cacert=/etc/kubernetes/pki/etcd/ca.crt     --cert=/etc/kubernetes/pki/etcd/healthcheck-client.crt     --key=/etc/kubernetes/pki/etcd/healthcheck-client.key     --write-out=table endpoint status`\n\nIf it doesn't, [perform compaction](https://etcd.io/blog/2023/how_to_debug_large_db_size_issue/)."
+}

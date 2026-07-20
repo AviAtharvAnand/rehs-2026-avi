@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__development__private-repos__001",
+  "source_url": "https://nrp.ai/documentation/userdocs/development/private-repos/",
+  "title": "Private Repos",
+  "text": "---\ntitle: Private Repos\ndescription: Private Repos\n---\n\nFollow these steps to provide access to container images stored in the **private** [Nautilus GitLab](https://gitlab.nrp-nautilus.io) repository.\n\n1. Go to your repository  **Settings->Repository->Deploy Tokens**, and [create a deploy token][3] with **read_registry** flag enabled.\n\n1. Follow the instructions for [pulling image from private registry][2]. Your registry server __your-registry-server__\n   will be NRP's default docker images registry FQDN, identifies as one of \n   - **gitlab-registry.nrp-nautilus.io**\n   - **gitlab-registry.nrp-nautilus.io/USERNAME/REPONAME**\n   \n   where __USERNAME__ is your Gitlab user name and __REPONAME__ is your repository.\n   \n   ```bash\n   kubectl create -n somenamespace secret docker-registry regcred --docker-server=gitlab-registry.nrp-nautilus.io/somegroup/somerepo --docker-username=gitlab+deploy-token-XXX --docker-password=XXXXXXXXXXXX\n   ```\n\n\n[2]: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/#create-a-secret-in-the-cluster-that-holds-your-authorization-token\n[3]: https://docs.gitlab.com/ce/user/project/deploy_tokens/"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__scheduling__004",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/scheduling/",
+  "title": "Scheduling",
+  "text": "return [client.create_job_request_item(priority=0, pod_spec=pod, namespace=\"your_namespace\")]\n\ntoken = \"your_id_token\"\n\nHOST = \"armada.nrp-nautilus.io\"\nPORT = \"50051\"\n\nqueue = f\"your_namespace\"\njob_set_id = f\"simple-jobset-{uuid.uuid1()}\"\n\nclass BearerAuth(grpc.AuthMetadataPlugin):\n    def __call__(self, context, callback):\n        callback(((\"authorization\", f\"Bearer {token}\"),), None)\n\nchannel = grpc.secure_channel(f\"{HOST}:{PORT}\",\n    grpc.composite_channel_credentials(\n        grpc.ssl_channel_credentials(),\n        grpc.metadata_call_credentials(BearerAuth())\n    )\n)\n\nclient = ArmadaClient(channel)\n\njob_request_items = create_dummy_job(client)\n\nclient.submit_jobs(\n    queue=queue, job_set_id=job_set_id, job_request_items=job_request_items\n)\n\nprint(\"Completed Workflow\")\n```"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__perfsonar__install__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/perfsonar/install/",
+  "title": "Install",
+  "text": "---\ntitle: Install\ndescription: Description\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n<div class=\"border\">\n<strong>perfSONAR installation options</strong>\n</div>\n\nThe **perfsonar-testpoint** bundle provides the minimal package elements required for the pS node to participate in mesh-orchestrated \ntests, and register results to a (central) measurement archive. Other acceptable bundles include **perfsonar-core**, and **perfsonar-toolkit**.\nSee official perfSONAR [documentation][install]\n\n[install]: http://docs.perfsonar.net/install_options.html"
+}

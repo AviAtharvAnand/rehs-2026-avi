@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__storage__ceph__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/storage/ceph/",
+  "title": "Ceph",
+  "text": "---\ntitle: Ceph Recover\ndescription: Ceph Recover\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n## Finding lost objects\n\nInstall [kubectl-rook-ceph](https://github.com/rook/kubectl-rook-ceph)\n\n`kubectl rook-ceph --operator-namespace rook-system -n rook debug start rook-ceph-osd-<id>`\n\n`ceph-objectstore-tool --data-path=/var/lib/rook/rook/... --mon-initial-members=... --dry-run --op=fix-lost`\n\n`kubectl rook-ceph --operator-namespace rook-system -n rook debug stop rook-ceph-osd-<id>`"
+}

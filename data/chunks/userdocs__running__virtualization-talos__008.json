@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__virtualization-talos__008",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/virtualization-talos/",
+  "title": "Virtualization Talos",
+  "text": "1. Once all worker VMs are running, exec to the `talosctl` deployment and bootstrap the workers from it\n\n    :::caution\n    Change &lt;your_namespace&gt; to your actual namespace\n    :::\n\n    ```bash\n    kubectl exec -it deploy/talosctl -- sh\n    dig talos-workers.<your_namespace>.svc.cluster.local +short | xargs -I{} talosctl apply-config -n {}:50000 --insecure -f /talos-config/worker.yaml\n    ```\n\n1. You should see the workers nodes appear in the cluster.\n\n</Steps>\n\n## Deploying Talos cluster using Ingress (WIP)\n\n**Coming soon...**"
+}

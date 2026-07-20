@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__tutorial__debugging__003",
+  "source_url": "https://nrp.ai/documentation/userdocs/tutorial/debugging/",
+  "title": "Debugging",
+  "text": "## Step-by-step Diagnosis of errors in Kubernetes\n\nDiagnosing and fixing a Kubernetes Job that is in an \"error\" state involves several steps to identify the root cause of the problem and take appropriate corrective actions. Here's a general approach you can follow:"
+}

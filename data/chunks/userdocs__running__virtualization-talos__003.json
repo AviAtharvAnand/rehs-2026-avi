@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__virtualization-talos__003",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/virtualization-talos/",
+  "title": "Virtualization Talos",
+  "text": "bootOrder: 1\n                  disk:\n                    bus: virtio\n          volumes:\n            - name: talos-cp01-disk-vda-root\n              dataVolume:\n                name: talos-cp01-root\n      dataVolumeTemplates:\n        - metadata:\n            name: talos-cp01-root\n          spec:\n            pvc:\n              accessModes:\n                - ReadWriteOnce\n              storageClassName: linstor-igrok\n              resources:\n                requests:\n                  storage: 40G\n            source:\n              http:\n                url: https://github.com/siderolabs/talos/releases/download/v1.12.2/metal-amd64.iso\n    ```"
+}

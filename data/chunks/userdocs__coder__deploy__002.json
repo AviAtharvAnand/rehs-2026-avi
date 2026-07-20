@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__coder__deploy__002",
+  "source_url": "https://nrp.ai/documentation/userdocs/coder/deploy/",
+  "title": "Deploy",
+  "text": "Replace `my-postgres-cluster.default.svc.cluster.local` with the endpoint for your PostgreSQL instance.\n\n```bash\nkubectl create secret generic coder-db-url -n your_namespace \\\n  --from-literal=url=\"postgres://coder:coder@my-postgres-cluster.default.svc.cluster.local:5432/coder?sslmode=disable\"\n```\n\n---\n\n### 6. Install Coder with Helm\n\nAdd the Coder Helm repository:\n\n```bash\nhelm repo add coder-v2 https://helm.coder.com/v2\n```\n\n---\n\n### 7. Configure Your Deployment (values.yaml)\n\nCreate a `values.yaml` file with the configuration settings:"
+}

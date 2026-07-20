@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__globus-connect__001",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/globus-connect/",
+  "title": "Globus Connect",
+  "text": "---\ntitle: Globus Connect\ndescription: Globus Connect\n---\n\nWe have a [globus-connect][1] Gitlab repository that provides step by step\ninstructions and all needed files for running globus-connect container and\ncreating a personal globus endpoint.\n\n[1]: https://gitlab.nrp-nautilus.io/prp/globus-connect"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__storage__ceph__002",
+  "source_url": "https://nrp.ai/documentation/userdocs/storage/ceph/",
+  "title": "Ceph",
+  "text": "**Coordination Among Clients:** Use coordination protocols or systems to manage write access among different clients.\n\n\n## Ceph filesystems data use\n\n<div id=\"observablehq-plot-087dc8ea\"></div>\n<p>Credit: <a href=\"https://observablehq.com/d/b9c19d9f7c57a186\">Ceph data usage</a></p>\n\n<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/@observablehq/inspector@5/dist/inspector.css\">\n<script type=\"module\">\nimport {Runtime, Inspector} from \"https://cdn.jsdelivr.net/npm/@observablehq/runtime@5/dist/runtime.js\";\nimport define from \"https://api.observablehq.com/d/b9c19d9f7c57a186.js?v=3\";\nnew Runtime().module(define, name => {\n  if (name === \"plot\") return new Inspector(document.querySelector(\"#observablehq-plot-087dc8ea\"));\n});\n</script>\n\n[General ceph grafana dashboard](https://grafana.nrp-nautilus.io/d/r6lloPJmz/ceph-cluster)\n\n## Currently available storageClasses:"
+}

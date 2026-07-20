@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__gpu-pods__007",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/gpu-pods/",
+  "title": "Gpu Pods",
+  "text": "Also you can choose the driver above something if you know which one you need (this will pick drivers **above** 535):\n\n```yaml\nspec:\n  affinity:\n    nodeAffinity:\n      requiredDuringSchedulingIgnoredDuringExecution:\n        nodeSelectorTerms:\n        - matchExpressions:\n          - key: nvidia.com/cuda.driver.major\n            operator: Gt\n            values:\n            - \"535\"\n```\n\n## Adding Shared Memory (shm)\n\n:::note[Adding Shared Memory (shm)]\n  You can add Shared Memory (shm) to your GPU pods in YAML:\n  \n  ```YAML\n          volumeMounts:\n          - mountPath: /dev/shm\n            name: dshm\n        volumes:\n        - name: dshm\n          emptyDir:\n            medium: Memory\n            sizeLimit: 2Gi\n  ```\n  `sizeLimit` is an optional term. Otherwise it defaults to half of the memory request. Not adding /dev/shm defaults to 64MB.\n:::"
+}

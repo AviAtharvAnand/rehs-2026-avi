@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__virtualization-windows__005",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/virtualization-windows/",
+  "title": "Virtualization Windows",
+  "text": "features:\n          acpi: {}\n          apic: {}\n          hyperv:\n            relaxed: {}\n            spinlocks:\n              spinlocks: 8191\n            vapic: {}\n          smm: {}\n        firmware:\n          bootloader:\n            efi:\n              secureBoot: true\n          uuid: 5d307ca9-b3ef-428c-8861-06e72d69f223\n      networks:\n      - name: default\n        pod: {}\n      volumes:\n      - name: cdromiso\n        dataVolume:\n          name: windev\n      - name: harddrive\n        persistentVolumeClaim:\n          claimName: winhd\n      - name: virtiocontainerdisk\n        containerDisk:\n          image: kubevirt/virtio-container-disk\n```"
+}

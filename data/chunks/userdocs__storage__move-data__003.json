@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__storage__move-data__003",
+  "source_url": "https://nrp.ai/documentation/userdocs/storage/move-data/",
+  "title": "Move Data",
+  "text": "```\nkubectl create -n my_namespace secret generic my-secret --from-file=secret.key\n```\n\nCheck it's created:\n\n```\nkubectl get -n my_namespace secrets\n```\n\nThen mount one to your pod as a folder:\n\n```yaml\n    volumeMounts:\n    - mountPath: /secrets\n      name: sec\n  volumes:\n  - name: sec\n    secret:\n      secretName: my-secret\n```\n\nOr use as a file:\n\n```yaml\n    volumeMounts:\n    - mountPath: /secrets/secret.key\n      subPath: secret.key\n      name: sec\n  volumes:\n  - name: sec\n    secret:\n      secretName: my-secret\n```\n\nOr even use as an environmental variable:\n\n```\nkubectl create -n my_namespace secret generic my-secret --from-literal=pass=my-super-pass\n```\n\n```yaml\n  - env:\n    - name: DB_PASS\n      valueFrom:\n        secretKeyRef:\n          key: pass\n          name: my-secret\n```\n\n## Inside the cluster\n\nTo copy the data from one volume to another (which can be located in a different region), you can use a pod (interactively) or a job (in batch mode).\n\nHere's the example of a job using the [gsutil](gitlab-registry.nrp-nautilus.io/prp/gsutil:latest) image to copy data in parallel between two mounted PVCs:"
+}

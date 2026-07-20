@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__fpgas__esnet_building__003",
+  "source_url": "https://nrp.ai/documentation/userdocs/fpgas/esnet_building/",
+  "title": "Esnet_Building",
+  "text": "2- Directly in the Jupyter notebook.\n\n3- In the Jupyter Bash terminal.\n\n4- In the Coder terminal window.\n\n5- Inside VSCode.\n\n6- Using `ssh` from the `coder cli`.\n\n<span style=\"color: red;\">7- Using the `kubectl exec` command.</span>\n\nFor the sake of demonstration, we are simply going to use `make`. However, if the notebook, kernel and/or command gets interrupted.\n\n\n```bash\n#make\n```\n\nConsidering how long the logs are, we recommend running `make > building.logs`.\n\nAfter the command finished, you will see the artifacts in `artifacts/p4_only..\n\n---\n---\n---\nNow we reach the end of writing building the artifacts from the P4 logic.\n\n---\nThis notebook is part 2 out of 3 in the **ESnet SmartNIC Tutorial on NRP** series.\n\nThis was last modified on March 4th, 2025.\n\nFor any inquiries, questions, feedback, please contact: mfsada@ucsd.edu"
+}

@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__fiona__builds__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/fiona/builds/",
+  "title": "Builds",
+  "text": "---\ntitle: Builds\ndescription: Builds\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n\n<div class=\"border\">\n  <strong>Hardware specs</strong> \n</div>\n\nHardware specs and pricing of specific components.\n\n| 2023 | 2021 | 2020 | 2019 | 2018 | 2017 | 2016 | 2015 |\n| ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- |\n| [Fall][2023fa] | [Winter][2021w] |[Winter][2020w] | [Spring][2019sp] | [Fall][2018fa]/[Spring][2018sp] | [Spring][2017su] | [Summer][2016su] | [Fall][2015fa] |"
+}

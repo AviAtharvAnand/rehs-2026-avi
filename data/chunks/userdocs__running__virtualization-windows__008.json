@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__virtualization-windows__008",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/virtualization-windows/",
+  "title": "Virtualization Windows",
+  "text": "Service and ingress:\n\n```yaml\napiVersion: networking.k8s.io/v1\nkind: Ingress\nmetadata:\n  annotations:\n    ingress.kubernetes.io/auth-secret: virtvnc-login\n    ingress.kubernetes.io/auth-type: basic\n    ingress.kubernetes.io/config-backend: |\n      http-request del-header Authorization    \n  name: virtvnc\nspec:\n  ingressClassName: haproxy\n  rules:\n  - host: <some_name>.nrp-nautilus.io\n    http:\n      paths:\n      - backend:\n          service:\n            name: virtvnc\n            port:\n              number: 8001\n        path: /\n        pathType: ImplementationSpecific\n  tls:\n  - hosts:\n    - <some_name>.nrp-nautilus.io\n---\napiVersion: v1\nkind: Service\nmetadata:\n  labels:\n    app: virtvnc\n  name: virtvnc\nspec:\n  ports:\n  - port: 8001\n    protocol: TCP\n    targetPort: 8001\n  selector:\n    app: virtvnc\n  type: ClusterIP\n```\n\nSecret to hold the password for your virtvnc:\n\n```bash\nkubectl create secret generic virtvnc-login -n <namespace> --from-literal=auth=<my_login>::<my_password>\n```"
+}

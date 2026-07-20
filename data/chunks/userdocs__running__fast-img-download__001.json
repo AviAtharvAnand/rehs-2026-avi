@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__fast-img-download__001",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/fast-img-download/",
+  "title": "Fast Img Download",
+  "text": "---\ntitle: Faster Image Download\ndescription: Faster Image Download\n---\n\n## Spegel image cache\n\nWe're currently using [spegel](https://github.com/XenitAB/spegel) on most nodes running containerd. It currently does not support CRI-O (several nodes in the cluster).\n\nSpegel allows all nodes act as a caching proxy for images, which speeds up images downloads a lot.\n\n**UBER Kraken is now deprecated! If you used \"localhost:30081\" URLs, please switch back to normal ones.**"
+}

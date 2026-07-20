@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__ai__managing_models__017",
+  "source_url": "https://nrp.ai/documentation/admindocs/ai/managing_models/",
+  "title": "Managing_Models",
+  "text": "Example priority class setting in a scavenging StatefulSet/Deployment:\n\n```yaml\nspec:\n  template:\n    spec:\n      priorityClassName: nice\n```\n\n#### Miscellaneous Information\n\n- In the above case, the `Backend` for Envoy AI Gateway when used should be configured as `hostname: minimax-vllm-inference.nrp-llm.svc.cluster.local` and `port: 5000`.\n\n- Refer to the below instructions for configuring vLLM/SGLang and for configuring Envoy AI Gateway for managed AI models.\n\n- Read the **Pipeline Parallelism** section when using more than `--pipeline-parallel-size 1`.\n\n### How to load models into GPUs\n\n**Refer to:** https://docs.vllm.ai/en/latest/configuration/conserving_memory/"
+}

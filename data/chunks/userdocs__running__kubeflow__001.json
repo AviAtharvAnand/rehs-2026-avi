@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__kubeflow__001",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/kubeflow/",
+  "title": "Kubeflow",
+  "text": "---\ntitle: Kubeflow Training\ndescription: Kubeflow Training\n---\n\nThe Kubeflow Training Operator simplifies the management of distributed training jobs on Kubernetes. It allows users to define training jobs as Kubernetes custom resources, making it easy to scale and monitor machine learning models within a Kubernetes environment.\n\nThis guide explains how to use the Kubeflow Training Operator to submit, manage, and monitor training jobs.\n\n---\n\n## Key Concepts\n\n- **TrainingJob**: A custom resource definition (CRD) used to define training jobs. It includes the details of the training task, such as the container image, number of replicas, and more.\n- **Worker**: A replica that runs the training logic. Multiple workers enable distributed training.\n- **PS (Parameter Server)**: Used in some distributed training frameworks to handle model parameter updates.\n- **Chief/Leader**: A single pod responsible for coordinating the training (used in TensorFlow jobs).\n\n---\n\n## Submitting a Training Job\n\nTo submit a training job, you need to create a YAML manifest file that describes the job. Below is an example YAML file for a TensorFlow training job."
+}

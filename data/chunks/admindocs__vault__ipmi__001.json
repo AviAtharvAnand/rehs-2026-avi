@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__vault__ipmi__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/vault/ipmi/",
+  "title": "Ipmi",
+  "text": "---\ntitle: Updating IPMI info\ndescription: Updating IPMI info\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\nLogin to Vault from your local computer:\n\n```\nvault login -method=oidc --address=https://vault.nrp-nautilus.io\n```\n\nCompare the contents of the file in ansible with the contents of the file in vault.\n\n```\nvault kv get --field=contents nrp-secrets/nautilus-hosts-ipmi | diff - <path_to_ansible_repo>/nautilus-ansible/nautilus-hosts-ipmi.yaml\n```\n\nThere's no git - you need to merge changes yourself. If needed, pull the remote file:\n\n```\nvault kv get --field=contents nrp-secrets/nautilus-hosts-ipmi > temp_ipmi.yaml\n```\n\nUpload the edited file with your changes to vault:\n\n```\nvault kv put nrp-secrets/nautilus-hosts-ipmi contents=@<path_to_ansible_repo>/nautilus-ansible/nautilus-hosts-ipmi.yaml\n```"
+}

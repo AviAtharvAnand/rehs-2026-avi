@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__upgrades__coder__001",
+  "source_url": "https://nrp.ai/documentation/admindocs/upgrades/coder/",
+  "title": "Coder",
+  "text": "---\ntitle: Coder\ndescription: Coder\n---\n\n:::caution\nThis page contains administrative documentation intended for cluster administrators and operators. This content may not be relevant for regular users.\n:::\n\n\n\n\n#### Upgrading Coder\n\nhttps://coder.com/docs/v2/latest/install/kubernetes#upgrading-coder-via-helm"
+}

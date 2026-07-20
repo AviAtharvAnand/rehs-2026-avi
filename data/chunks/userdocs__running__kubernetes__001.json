@@ -1,0 +1,6 @@
+{
+  "id": "userdocs__running__kubernetes__001",
+  "source_url": "https://nrp.ai/documentation/userdocs/running/kubernetes/",
+  "title": "Kubernetes",
+  "text": "---\ntitle: Python k8s API\ndescription: Python k8s API\n---\n\nKubernetes offers API clients that allow you to build integrations under-the-hood of applications.\nThe following is an example Python client for Nautilus that can submit it's own jobs and all the other functions of `kubectl`\nThe config mounts the Ceph Shared FileSystem as well as the node's local scratch space.\nBe sure to configure resources appropriately to your application.\n\n> **Ephemeral storage on Nautilus:** Pods that write more than **50Gi** of ephemeral scratch data per container (for example, to an `emptyDir` at `/mnt/data`) can be evicted. When your code uses `emptyDir` or other scratch space, set `resources.requests.ephemeral-storage` in the container (and optionally `resources.limits.ephemeral-storage`) to the largest scratch size you expect (as in the example below). See [Local Scratch](/documentation/userdocs/storage/local) for more details and complete YAML.\n\n```\nimport os\nfrom kubernetes import client, config, utils\nfrom kubernetes.client.rest import ApiException\nfrom skimage.transform import resize\nfrom uuid import uuid4\nimport time\nfrom pathlib import Path"
+}

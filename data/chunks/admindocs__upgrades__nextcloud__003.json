@@ -1,0 +1,6 @@
+{
+  "id": "admindocs__upgrades__nextcloud__003",
+  "source_url": "https://nrp.ai/documentation/admindocs/upgrades/nextcloud/",
+  "title": "Nextcloud",
+  "text": "#### Upgrading Collabora and LanguageTool\n\nCollabora and LanguageTool should only require a restart to upgrade to the latest tag. Read https://hub.docker.com/r/collabora/code and https://hub.docker.com/r/meyay/languagetool to see if there are breaking changes in case the container suddenly does not work."
+}
