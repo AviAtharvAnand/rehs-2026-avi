@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: avi-nrp-helper
+  namespace: rehs-2026-chatbot
+  labels: {app: avi-nrp-helper}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: avi-nrp-helper}
+  template:
+    metadata:
+      labels: {app: avi-nrp-helper}
+    spec:
+      containers:
+        - name: streamlit
+          image: aviatharvanand/nrp-helper:latest
+          imagePullPolicy: Always
+
+          ports:
+            - containerPort: 8501
+
+          env:
+            - name: NRP_LLM_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  name: nrp-llm-token
+                  key: NRP_LLM_TOKEN
+
+            - name: NRP_LLM_BASE_URL
+              value: https://ellm.nrp-nautilus.io/v1
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: avi-nrp-helper
+  namespace: rehs-2026-chatbot
+spec:
+  selector: {app: avi-nrp-helper}
+  ports:
+    - {port: 8501, targetPort: 8501}

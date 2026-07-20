@@ -11,3 +11,11 @@ build/
 dist/
 *.egg-info
 .git
+
+.vscode/
+.ipynb_checkpoints/
+*.log
+*.zip
+*.tar
+*.gz
+.DS_Store
