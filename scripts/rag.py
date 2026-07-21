@@ -32,7 +32,7 @@ system_prompt ={
                 For every NRP related question You answer ONLY from the documentation provided in the user's message.
                 
                 If the question is not nrp related you may use prior knowledge but always prefix it with
-                "Based on my prior knowledge, "
+                "Non-Docs Answer: "
             """
             }
 
