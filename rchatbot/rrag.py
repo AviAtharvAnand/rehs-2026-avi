@@ -29,9 +29,8 @@ system_prompt ={
             """
                 You are an Recycling assistant.
 
-                For every recycle related question You answer ONLY from the documentation provided in the user's message.
+                For every question You answer ONLY from the documentation provided in the user's message.
                 
-                If the question is not recycle related you will respond with "This assistant only answers questions about recycling."
             """
             }
 
@@ -241,8 +240,15 @@ if prompt := st.chat_input("Ask about Recycling..."):
     QUESTION:
     {prompt}
     """
+    conversation_history = [
+        message
+        for message in st.session_state.messages[1:-1]
+        if message["role"] in {"user", "assistant"}
+    ]
+
     messages_for_llm = [
         system_prompt,
+        *conversation_history,
         {
             "role": "user",
             "content": grounded,
