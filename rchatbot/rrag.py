@@ -15,8 +15,8 @@ load_dotenv()
 client = OpenAI(api_key=os.environ["NRP_LLM_TOKEN"],
                 base_url=os.environ.get("NRP_LLM_BASE_URL", "https://ellm.nrp-nautilus.io/v1"))
 
-st.set_page_config(page_title="Recycle Helper", page_icon="🤖")
-st.title("🤖 Recycle Helper")
+st.set_page_config(page_title="Recycle Assistant", page_icon="🤖")
+st.title("🤖 Recycle Assistant")
 
 with st.sidebar:
     st.header("Settings")
@@ -31,7 +31,7 @@ system_prompt ={
 
                 For every recycle related question You answer ONLY from the documentation provided in the user's message.
                 
-                If the question is not recycle related you will respond with "READ MY TITLE YOU IDIOT!!!"
+                If the question is not recycle related you will respond with "This assistant only answers questions about recycling."
             """
             }
 

@@ -11,7 +11,6 @@ client = OpenAI(api_key=os.environ["NRP_LLM_TOKEN"],
 
 chunks = []
 
-# fill blanks
 for file in Path("recycling/chunks").glob("*.json"):
     with open(file, encoding="utf-8") as f:
         chunks.append(json.load(f))
@@ -19,7 +18,7 @@ for file in Path("recycling/chunks").glob("*.json"):
 def embed(text: str) -> list[float]:
     return client.embeddings.create(model="qwen3-embedding", input=[text]).data[0].embedding
 
-chroma_client = chromadb.PersistentClient(path="./chroma_db")
+chroma_client = chromadb.PersistentClient(path="./recycling_chroma_db")
 
 try:
     chroma_client.delete_collection("recycling_docs")

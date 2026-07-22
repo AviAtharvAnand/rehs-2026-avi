@@ -11,8 +11,7 @@ splitter = RecursiveCharacterTextSplitter(
     chunk_overlap=400,
 )
 
-# fill blanks
-docs = Path("")
+docs = Path("recycling_markdown")
 
 chunk_count = 0
 files = list(docs.rglob("*.md")) + list(docs.rglob("*.mdx"))
@@ -21,17 +20,14 @@ for md_file in files:
 
     text = md_file.read_text(encoding="utf-8")
     text = text.replace("\r\n", "\n").strip()
-    # TODO: clean the markdown if necessary
+
+    if not text:
+        continue
 
     page_name = md_file.relative_to(docs).with_suffix("").as_posix().replace("/", "__")
     title = md_file.stem.replace("-", " ").title()
 
-    # fill blanks
-    url = (
-        ""
-        + md_file.relative_to(docs).with_suffix("").as_posix()
-        + "/"
-    )
+    url = md_file.as_posix()
 
     chunks = splitter.split_text(text)
 
