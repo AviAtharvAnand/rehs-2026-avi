@@ -237,8 +237,15 @@ if prompt := st.chat_input("Ask about NRP..."):
     QUESTION:
     {prompt}
     """
+    conversation_history = [
+        message
+        for message in st.session_state.messages[1:-1]
+        if message["role"] in {"user", "assistant"}
+    ]
+
     messages_for_llm = [
         system_prompt,
+        *conversation_history,
         {
             "role": "user",
             "content": grounded,
