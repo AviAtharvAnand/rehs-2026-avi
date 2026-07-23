@@ -108,21 +108,31 @@ def rerank(question: str, chunks: list[dict]) -> list[dict]:
     return sorted(chunks, key=lambda chunk: chunk["rank_score"])
 
 
-def rewrite_search_query(question: str) -> str:
+def rewrite_single_query(question: str) -> str:
     query = question.lower().strip()
 
     query = re.sub(
-        r"^(?:how\s+(?:do|can|could|would)\s+(?:i|you)\s+|how\s+to\s+)",
+        r"^(?:how\s+(?:do|can|could|would)\s+(?:i|you)\s+|"
+        r"how\s+to\s+)",
         "",
         query,
     )
 
-    query = re.sub(r"\bon nrp\b", "", query)
-
-    # Remove punctuation at the end.
     query = re.sub(r"[?.!,;:]+$", "", query)
 
     return " ".join(query.split()) or question
+
+
+def rewrite_search_query(question: str) -> str:
+    questions = question.splitlines()
+
+    rewritten_questions = [
+        rewrite_single_query(item)
+        for item in questions
+        if item.strip()
+    ]
+
+    return " ".join(rewritten_questions)
 
 def token_stream(messages):
     request_start = time.time()
@@ -135,7 +145,7 @@ def token_stream(messages):
         messages=messages,
         stream=True,
         timeout=60,
-        temperature=0.8,
+        temperature=0.2,
         extra_body={
             "chat_template_kwargs": {
                 "enable_thinking": False
@@ -168,14 +178,59 @@ def token_stream(messages):
 
             yield content
 
+def rewrite_follow_up_with_ai(messages, current_question):
+    recent_history = [
+        message
+        for message in messages
+        if message["role"] in {"user", "assistant"}
+    ][-4:]
+
+    rewrite_messages = [
+        {
+            "role": "system",
+            "content": (
+                "/no think\n\n"
+                "Rewrite the latest user question as a standalone search query. "
+                "Use conversation history only to resolve references such as "
+                "'it', 'them', 'that', or 'there'. "
+                "If the latest question is independent, return it unchanged. "
+                "Do not answer the question. "
+                "Return only the rewritten query."
+            ),
+        },
+        *recent_history,
+        {
+            "role": "user",
+            "content": current_question,
+        },
+    ]
+
+    response = client.chat.completions.create(
+        model="qwen3-small",
+        messages=rewrite_messages,
+        temperature=0,
+        timeout=30,
+        extra_body={
+            "chat_template_kwargs": {
+                "enable_thinking": False
+            }
+        },
+    )
+
+    return response.choices[0].message.content.strip()
+
 if prompt := st.chat_input("Ask about Recycling..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
     try:
         with st.spinner("Searching Recycling docs..."):
-            search_query = rewrite_search_query(prompt)
-            retrieved = search(search_query, k=20)
+            standalone_query = rewrite_follow_up_with_ai(
+                st.session_state.messages[:-1],
+                prompt,
+            )
+            search_query = rewrite_search_query(standalone_query)
+            retrieved = search(search_query, k=10)
             reranked = rerank(search_query, retrieved)
 
             print("All retrieved and reranked chunks:", flush=True)
@@ -195,6 +250,7 @@ if prompt := st.chat_input("Ask about Recycling..."):
 
             print(f"Original question: {prompt}", flush=True)
             print(f"Rewritten search query: {search_query}", flush=True)
+            print(f"Standalone query: {standalone_query}")
 
             print("\nChunks being sent to the LLM:", flush=True)
 
