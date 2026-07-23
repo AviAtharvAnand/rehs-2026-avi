@@ -42,7 +42,39 @@ kind: Service
 metadata:
   name: avi-nrp-helper
   namespace: rehs-2026-chatbot
+
 spec:
-  selector: {app: avi-nrp-helper}
+  selector:
+    app: avi-nrp-helper
+
   ports:
-    - {port: 8501, targetPort: 8501}
+    - port: 80
+      targetPort: 8501
+      protocol: TCP
+
+  type: ClusterIP
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: avi-nrp-helper
+  namespace: rehs-2026-chatbot
+
+spec:
+  ingressClassName: haproxy
+
+  tls:
+    - hosts:
+        - avi-nrp-helper.nrp-nautilus.io
+  rules:
+    - host: avi-nrp-helper.nrp-nautilus.io
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: avi-nrp-helper
+                port:
+                  number: 80
