@@ -30,7 +30,12 @@ system_prompt ={
                 You are an Recycling assistant.
 
                 For every question You answer ONLY from the documentation provided in the user's message.
-                
+
+                if the question's answer is not in the documentation, say "The provided documentation does not contain information regarding {question}"
+
+                if the question is not recycle related, say 
+                "I am a Recycle helper assistant and this question is not to 
+                do with Recycling. Please only ask questions regarding recycling"                
             """
             }
 
@@ -282,7 +287,7 @@ if prompt := st.chat_input("Ask about Recycling..."):
     grounded = f"""
     
     Example: Are plastic grocery bags recyclable in califoria, 
-    ANSWER: Plastic grocery bags should never be placed in curbside recycling bins, 
+    Plastic grocery bags should never be placed in curbside recycling bins, 
     as they wrap around sorting equipment and cause facility shutdowns. 
     However, you can recycle them by dropping them off at 
     dedicated collection bins located at the front of major supermarkets a
