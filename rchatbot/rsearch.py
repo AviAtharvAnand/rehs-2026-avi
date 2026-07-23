@@ -18,7 +18,10 @@ for file in Path("recycling/chunks").glob("*.json"):
 def embed(text: str) -> list[float]:
     return client.embeddings.create(model="qwen3-embedding", input=[text]).data[0].embedding
 
-coll = chromadb.PersistentClient(path="./recycling_chroma_db").get_or_create_collection("recycling_docs")
+BASE_DIR = Path(__file__).resolve().parent
+CHROMA_PATH = BASE_DIR / "recycling_chroma_db"
+
+coll = chromadb.PersistentClient(path=str(CHROMA_PATH)).get_or_create_collection("recycling_docs")
 
 def search(query: str, k: int = 5) -> list[dict]:
     res = coll.query(query_embeddings=[embed(query)], n_results=k)
