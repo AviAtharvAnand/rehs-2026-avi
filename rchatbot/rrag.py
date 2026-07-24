@@ -236,14 +236,14 @@ if prompt := st.chat_input("Ask about Recycling..."):
             retrieved = search(search_query, k=10)
             reranked = rerank(search_query, retrieved)
 
-            print("All retrieved and reranked chunks:", flush=True)
-            for index, chunk in enumerate(reranked, start=1):
-                print(
-                    f"{index}. {chunk['title']} | "
-                    f"distance: {chunk['score']:.3f} | "
-                    f"reranked: {chunk['rank_score']:.3f}",
-                    flush=True,
-                )
+            # print("All retrieved and reranked chunks:", flush=True)
+            # for index, chunk in enumerate(reranked, start=1):
+            #     print(
+            #         f"{index}. {chunk['title']} | "
+            #         f"distance: {chunk['score']:.3f} | "
+            #         f"reranked: {chunk['rank_score']:.3f}",
+            #         flush=True,
+            #     )
 
             if not reranked:
                 st.error("No documentation chunks were returned by search.")
@@ -257,15 +257,15 @@ if prompt := st.chat_input("Ask about Recycling..."):
 
             print("\nChunks being sent to the LLM:", flush=True)
 
-            for index, chunk in enumerate(chunks, start=1):
-                print(
-                    f"\n===== Chunk {index}: {chunk['title']} =====\n"
-                    f"Source: {chunk['source_url']}\n"
-                    f"Distance: {chunk['score']:.3f}\n"
-                    f"Reranked: {chunk['rank_score']:.3f}\n\n"
-                    f"{chunk['text']}\n",
-                    flush=True,
-                )
+            # for index, chunk in enumerate(chunks, start=1):
+            #     print(
+            #         f"\n===== Chunk {index}: {chunk['title']} =====\n"
+            #         f"Source: {chunk['source_url']}\n"
+            #         f"Distance: {chunk['score']:.3f}\n"
+            #         f"Reranked: {chunk['rank_score']:.3f}\n\n"
+            #         f"{chunk['text']}\n",
+            #         flush=True,
+            #     )
 
     except BadRequestError as error:
         print(f"Embedding gateway error: {error}", flush=True)
@@ -276,11 +276,11 @@ if prompt := st.chat_input("Ask about Recycling..."):
         st.stop()
     
     context = "\n\n---\n\n".join(f"[Source: {c['title']}]\n{c['text']}" for c in chunks)
-    print("\n" + "=" * 80, flush=True)
-    print("FULL CONTEXT SENT TO LLM", flush=True)
-    print("=" * 80, flush=True)
-    print(context, flush=True)
-    print("=" * 80 + "\n", flush=True)
+    # print("\n" + "=" * 80, flush=True)
+    # print("FULL CONTEXT SENT TO LLM", flush=True)
+    # print("=" * 80, flush=True)
+    # print(context, flush=True)
+    # print("=" * 80 + "\n", flush=True)
 
     grounded = f"""
     
