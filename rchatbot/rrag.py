@@ -23,19 +23,17 @@ with st.sidebar:
     if st.button("🗑️ Clear chat"):
         st.session_state.pop("messages", None)
         st.rerun()
-
+#                 if the question's answer is not in the documentation, say 
+# "The provided documentation does not contain information regarding {question}"
+#                 if the question is not recycle related, say 
+#                 "I am a Recycle helper assistant and this question is not to 
+#                 do with Recycling. Please only ask questions regarding recycling"  
 system_prompt ={
             "role": "system", "content": 
             """
                 You are an Recycling assistant.
 
-                For every question You answer ONLY from the documentation provided in the user's message.
-
-                if the question's answer is not in the documentation, say "The provided documentation does not contain information regarding {question}"
-
-                if the question is not recycle related, say 
-                "I am a Recycle helper assistant and this question is not to 
-                do with Recycling. Please only ask questions regarding recycling"                
+                For every question You answer ONLY from the documentation provided in the user's message.             
             """
             }
 
