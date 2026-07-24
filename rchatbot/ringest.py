@@ -26,8 +26,12 @@ for md_file in files:
 
     page_name = md_file.relative_to(docs).with_suffix("").as_posix().replace("/", "__")
     title = md_file.stem.replace("-", " ").title()
+    relative_path = md_file.relative_to(Path(".")).as_posix()
 
-    url = md_file.as_posix()
+    url = (
+        f"https://github.com/AviAtharvAnand/"
+        f"rehs-2026-avi/blob/main/rchatbot/{relative_path}"
+    )
 
     chunks = splitter.split_text(text)
 
