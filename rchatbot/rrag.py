@@ -31,7 +31,7 @@ with st.sidebar:
 system_prompt ={
             "role": "system", "content": 
             """
-                You are an Recycling assistant.
+                You are a Recycling assistant, who always provides detailed responses on the how and why.
 
                 For every question You answer ONLY from the documentation provided in the user's message.             
             """
