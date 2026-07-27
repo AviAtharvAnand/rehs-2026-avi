@@ -17,6 +17,7 @@ client = OpenAI(api_key=os.environ["NRP_LLM_TOKEN"],
 
 st.set_page_config(page_title="Recycle Assistant", page_icon="🤖")
 st.title("🤖 Recycle Assistant")
+st.caption("Helping You Recycle Effectively Using Trusted Documentation")
 
 with st.sidebar:
     st.header("Settings")
