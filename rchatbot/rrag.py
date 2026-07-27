@@ -16,7 +16,7 @@ client = OpenAI(api_key=os.environ["NRP_LLM_TOKEN"],
                 base_url=os.environ.get("NRP_LLM_BASE_URL", "https://ellm.nrp-nautilus.io/v1"))
 
 st.set_page_config(page_title="Recycle Assistant", page_icon="♻️")
-st.title("♻️ Recycle Assistant")
+st.title("♻️ Recycle Assistant", anchor = False)
 st.caption("Helping You Recycle Effectively Using Trusted Documentation")
 
 with st.sidebar:
