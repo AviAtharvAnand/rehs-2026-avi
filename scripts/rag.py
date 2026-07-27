@@ -17,6 +17,7 @@ client = OpenAI(api_key=os.environ["NRP_LLM_TOKEN"],
 
 st.set_page_config(page_title="NRP Helper", page_icon="🤖")
 st.title("🤖 NRP Helper")
+st.caption("Your Trusted Assistant for NRP Knowledge")
 
 with st.sidebar:
     st.header("Settings")
