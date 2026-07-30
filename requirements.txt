@@ -5,3 +5,4 @@ python-weather==2.1.0
 nest-asyncio==1.6.0
 streamlit==1.47.1
 chromadb==1.5.9
+kubernetes

@@ -9,6 +9,7 @@ from openai import APIConnectionError
 import time
 import httpx
 import re
+from command_router import run_kubernetes_command
 
 
 load_dotenv()
@@ -231,6 +232,22 @@ if prompt := st.chat_input("Ask about NRP..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
+
+    is_command, command_result = run_kubernetes_command(prompt)
+
+    if is_command:
+        with st.chat_message("assistant"):
+            st.code(command_result, language="text")
+
+        st.session_state.messages.append(
+            {
+                "role": "assistant",
+                "content": command_result,
+            }
+        )
+
+        st.stop()
+
     try:
         with st.spinner("Searching NRP docs..."):
             standalone_query = rewrite_follow_up_with_ai(
