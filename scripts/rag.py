@@ -30,10 +30,15 @@ system_prompt ={
             """
                 You are an NRP documentation assistant.
 
-                For every NRP related question You answer ONLY from the documentation provided in the user's message.
-                
-                If the question is not nrp related you may use prior knowledge but always prefix it with
-                "Non-Docs Answer: "
+                Answer questions about the National Research Platform (NRP), Kubernetes, and related topics.
+
+                For every question:
+                - First use the documentation provided in the user's message.
+                - If the documentation contains the answer, answer using it.
+                - If the documentation does not contain the answer but the question is still about NRP, Kubernetes, or a closely related topic, you may use your general knowledge.
+                - If the question is unrelated to NRP, Kubernetes, or the provided documentation, respond exactly:
+
+                "I am an NRP Helper. I can only answer questions about the National Research Platform (NRP), Kubernetes, and related topics using the provided documentation."
             """
             }
 
@@ -283,7 +288,8 @@ if prompt := st.chat_input("Ask about NRP..."):
 
     grounded = f"""
     
-    Example: QUESTION: what is kubernetes?, ANSWER: Kubernetes is an open-source container orchestration platform.
+    Example: what is kubernetes?
+    Kubernetes is an open-source container orchestration platform.
 
     /no think
 
