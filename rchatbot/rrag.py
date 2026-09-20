@@ -284,13 +284,6 @@ if prompt := st.chat_input("Ask about Recycling..."):
     # print("=" * 80 + "\n", flush=True)
 
     grounded = f"""
-    
-    Example: Are plastic grocery bags recyclable in califoria, 
-    Plastic grocery bags should never be placed in curbside recycling bins, 
-    as they wrap around sorting equipment and cause facility shutdowns. 
-    However, you can recycle them by dropping them off at 
-    dedicated collection bins located at the front of major supermarkets a
-    nd retail stores (like Target, Walmart, and local grocery stores).
 
     /no think
 
