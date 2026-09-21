@@ -108,11 +108,17 @@ with st.sidebar:
             use_container_width=True
         )
 
-        if st.button("🔍 Analyze Item"):
-            with st.spinner("Analyzing image..."):
-                st.session_state.image_description = (
-                    analyze_recycling_image(uploaded_image)
-                )
+    if st.button("🔍 Analyze Item"):
+        with st.spinner("Analyzing image..."):
+            st.session_state.image_description = (
+                analyze_recycling_image(uploaded_image)
+            )
+
+        st.session_state.pending_image_question = (
+            "Can this item be recycled, and how should it be disposed of?"
+        )
+
+        st.rerun()
 
     if "image_description" in st.session_state:
         st.success("Image analyzed")
@@ -312,14 +318,20 @@ def rewrite_follow_up_with_ai(messages, current_question):
 
     return response.choices[0].message.content.strip()
 
-if prompt := st.chat_input("Ask about Recycling..."):
-    image_description = None
+typed_prompt = st.chat_input("Ask about Recycling...")
 
-    if uploaded_image:
-        with st.spinner("Analyzing image..."):
-            image_description = analyze_recycling_image(
-                uploaded_image
-            )
+auto_prompt = st.session_state.pop(
+    "pending_image_question",
+    None
+)
+
+prompt = typed_prompt or auto_prompt
+
+if prompt:
+    image_description = st.session_state.get(
+        "image_description",
+        None
+    )
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
