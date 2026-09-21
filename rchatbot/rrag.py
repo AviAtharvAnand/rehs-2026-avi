@@ -21,9 +21,27 @@ st.caption("Helping You Recycle Effectively Using Trusted Documentation")
 
 with st.sidebar:
     st.header("Settings")
+
     if st.button("🗑️ Clear chat"):
         st.session_state.pop("messages", None)
         st.rerun()
+
+    st.divider()
+
+    st.subheader("📷 Check an Item")
+
+    uploaded_image = st.file_uploader(
+        "Upload an item to check",
+        type=["jpg", "jpeg", "png"],
+        key="recycling_image"
+    )
+
+    if uploaded_image:
+        st.image(
+            uploaded_image,
+            caption="Item to analyze",
+            use_container_width=True
+        )
 #                 if the question's answer is not in the documentation, say 
 # "The provided documentation does not contain information regarding {question}"
 #                 if the question is not recycle related, say 
@@ -223,15 +241,95 @@ def rewrite_follow_up_with_ai(messages, current_question):
 
     return response.choices[0].message.content.strip()
 
+import base64
+
+
+def analyze_recycling_image(uploaded_image):
+    image_bytes = uploaded_image.getvalue()
+
+    image_base64 = base64.b64encode(
+        image_bytes
+    ).decode("utf-8")
+
+    mime_type = uploaded_image.type
+
+    response = client.chat.completions.create(
+        model="qwen3-small",
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "Identify the main waste or recycling item visible in the image. "
+                    "visible in the image. "
+                    "Do NOT decide whether it is recyclable. "
+                    "Return a concise description containing: "
+                    "1. object type, "
+                    "2. likely material, "
+                    "3. visible contamination or food residue. "
+                    "Keep the response under 60 words."
+                ),
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": (
+                            "Identify this item for a recycling "
+                            "assistant."
+                        ),
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url":
+                            f"data:{mime_type};base64,{image_base64}"
+                        },
+                    },
+                ],
+            },
+        ],
+        temperature=0,
+        timeout=30,
+        extra_body={
+            "chat_template_kwargs": {
+                "enable_thinking": False
+            }
+        }
+    )
+
+    return response.choices[0].message.content.strip()
+
 if prompt := st.chat_input("Ask about Recycling..."):
+    image_description = None
+
+    if uploaded_image:
+        with st.spinner("Analyzing image..."):
+            image_description = analyze_recycling_image(
+                uploaded_image
+            )
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
     try:
         with st.spinner("Searching Recycling docs..."):
+            if image_description:
+                question_for_rag = f"""
+                The user uploaded an image.
+
+                IMAGE DESCRIPTION:
+                {image_description}
+
+                USER QUESTION:
+                {prompt}
+                """
+            else:
+                question_for_rag = prompt
+
+            st.write("Image analysis:", image_description)
             standalone_query = rewrite_follow_up_with_ai(
                 st.session_state.messages[:-1],
-                prompt,
+                question_for_rag,
             )
             search_query = rewrite_search_query(standalone_query)
             retrieved = search(search_query, k=10)
@@ -290,8 +388,17 @@ if prompt := st.chat_input("Ask about Recycling..."):
     DOCUMENTATION:
     {context}
 
-    QUESTION:
+    IMAGE DESCRIPTION:
+    {image_description if image_description else "No image provided"}
+
+    USER QUESTION:
     {prompt}
+
+    Use the IMAGE DESCRIPTION only to understand what object
+    the user is referring to.
+
+    Determine whether and how the item should be recycled or
+    disposed of from the DOCUMENTATION.
     """
     conversation_history = [
         message
