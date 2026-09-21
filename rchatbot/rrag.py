@@ -9,6 +9,7 @@ from openai import APIConnectionError
 import time
 import httpx
 import re
+import base64
 
 
 load_dotenv()
@@ -19,15 +20,79 @@ st.set_page_config(page_title="Recycle Assistant", page_icon="♻️")
 st.title("♻️ Recycle Assistant", anchor = False)
 st.caption("Helping You Recycle Effectively Using Trusted Documentation")
 
+def analyze_recycling_image(uploaded_image):
+    image_bytes = uploaded_image.getvalue()
+
+    image_base64 = base64.b64encode(
+        image_bytes
+    ).decode("utf-8")
+
+    mime_type = uploaded_image.type
+
+    response = client.chat.completions.create(
+        model="qwen3-small",
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "Identify the main waste or recycling item visible in the image. "
+                    "Carefully identify the main discarded item in the image. "
+                    "This image may contain crumpled, dirty, folded, or partially obscured trash. "
+                    "Do not assume an item is a plastic bag simply because it contains plastic. "
+                    "Consider common waste items such as diapers, wipes, food packaging, "
+                    "plastic bags, bottles, cans, paper, cardboard, and sanitary products. "
+
+                    "Return exactly these fields:\n"
+                    "Object: <best identification>\n"
+                    "Material: <likely materials>\n"
+                    "Condition: <clean, dirty, wet, contaminated, etc.>\n"
+                    "Confidence: <high, medium, or low>\n"
+                    "Alternative: <second most likely identification if uncertain>\n"
+
+                    "Do NOT determine recyclability."
+                ),
+            },
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": (
+                            "Identify this item for a recycling "
+                            "assistant."
+                        ),
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url":
+                            f"data:{mime_type};base64,{image_base64}"
+                        },
+                    },
+                ],
+            },
+        ],
+        temperature=0,
+        timeout=30,
+        extra_body={
+            "chat_template_kwargs": {
+                "enable_thinking": False
+            }
+        }
+    )
+
+    return response.choices[0].message.content.strip()
+
+
 with st.sidebar:
     st.header("Settings")
 
     if st.button("🗑️ Clear chat"):
         st.session_state.pop("messages", None)
+        st.session_state.pop("image_description", None)
         st.rerun()
 
     st.divider()
-
     st.subheader("📷 Check an Item")
 
     uploaded_image = st.file_uploader(
@@ -42,11 +107,17 @@ with st.sidebar:
             caption="Item to analyze",
             use_container_width=True
         )
-#                 if the question's answer is not in the documentation, say 
-# "The provided documentation does not contain information regarding {question}"
-#                 if the question is not recycle related, say 
-#                 "I am a Recycle helper assistant and this question is not to 
-#                 do with Recycling. Please only ask questions regarding recycling"  
+
+        if st.button("🔍 Analyze Item"):
+            with st.spinner("Analyzing image..."):
+                st.session_state.image_description = (
+                    analyze_recycling_image(uploaded_image)
+                )
+
+    if "image_description" in st.session_state:
+        st.success("Image analyzed")
+        st.write(st.session_state.image_description)
+
 system_prompt ={
             "role": "system", "content": 
             """
@@ -237,65 +308,6 @@ def rewrite_follow_up_with_ai(messages, current_question):
                 "enable_thinking": False
             }
         },
-    )
-
-    return response.choices[0].message.content.strip()
-
-import base64
-
-
-def analyze_recycling_image(uploaded_image):
-    image_bytes = uploaded_image.getvalue()
-
-    image_base64 = base64.b64encode(
-        image_bytes
-    ).decode("utf-8")
-
-    mime_type = uploaded_image.type
-
-    response = client.chat.completions.create(
-        model="qwen3-small",
-        messages=[
-            {
-                "role": "system",
-                "content": (
-                    "Identify the main waste or recycling item visible in the image. "
-                    "visible in the image. "
-                    "Do NOT decide whether it is recyclable. "
-                    "Return a concise description containing: "
-                    "1. object type, "
-                    "2. likely material, "
-                    "3. visible contamination or food residue. "
-                    "Keep the response under 60 words."
-                ),
-            },
-            {
-                "role": "user",
-                "content": [
-                    {
-                        "type": "text",
-                        "text": (
-                            "Identify this item for a recycling "
-                            "assistant."
-                        ),
-                    },
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url":
-                            f"data:{mime_type};base64,{image_base64}"
-                        },
-                    },
-                ],
-            },
-        ],
-        temperature=0,
-        timeout=30,
-        extra_body={
-            "chat_template_kwargs": {
-                "enable_thinking": False
-            }
-        }
     )
 
     return response.choices[0].message.content.strip()
