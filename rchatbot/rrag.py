@@ -10,6 +10,10 @@ import time
 import httpx
 import re
 import base64
+from PIL import Image
+from io import BytesIO
+from openai import InternalServerError
+import streamlit.components.v1 as components
 
 
 load_dotenv()
@@ -19,15 +23,54 @@ client = OpenAI(api_key=os.environ["NRP_LLM_TOKEN"],
 st.set_page_config(page_title="Recycle Assistant", page_icon="♻️")
 st.title("♻️ Recycle Assistant", anchor = False)
 st.caption("Helping You Recycle Effectively Using Trusted Documentation")
+main_image_status = st.empty()
+
+def scroll_to_bottom():
+    components.html(
+        """
+        <script>
+        const container =
+            window.parent.document.querySelector(
+                '[data-testid="stAppViewContainer"]'
+            );
+
+        if (container) {
+            container.scrollTo({
+                top: container.scrollHeight,
+                behavior: 'smooth'
+            });
+        }
+        </script>
+        """,
+        height=0,
+    )
 
 def analyze_recycling_image(uploaded_image):
-    image_bytes = uploaded_image.getvalue()
+    image = Image.open(uploaded_image)
+
+    # Convert to RGB so JPEG saving works reliably
+    if image.mode != "RGB":
+        image = image.convert("RGB")
+
+    # Shrink very large photos
+    image.thumbnail((1280, 1280))
+
+    buffer = BytesIO()
+
+    image.save(
+        buffer,
+        format="JPEG",
+        quality=80,
+        optimize=True
+    )
+    
+    image_bytes = buffer.getvalue()
 
     image_base64 = base64.b64encode(
         image_bytes
     ).decode("utf-8")
 
-    mime_type = uploaded_image.type
+    mime_type = "image/jpeg"
 
     response = client.chat.completions.create(
         model="qwen3-small",
@@ -107,18 +150,34 @@ with st.sidebar:
             caption="Item to analyze",
             use_container_width=True
         )
-
     if st.button("🔍 Analyze Item"):
-        with st.spinner("Analyzing image..."):
-            st.session_state.image_description = (
-                analyze_recycling_image(uploaded_image)
+        if uploaded_image is None:
+            st.error("Please upload an image before analyzing.")
+        else:
+            try:
+                main_image_status.info("🔍 Analyzing image...")
+
+                scroll_to_bottom()
+
+                with st.spinner("Analyzing image..."):
+                    st.session_state.image_description = (
+                        analyze_recycling_image(uploaded_image)
+                    )
+
+                main_image_status.success("✅ Image analysis complete")
+
+                st.session_state.pending_image_question = (
+                    "Can this item be recycled, and how should it be disposed of?"
+                )
+
+                st.rerun()
+
+            except InternalServerError:
+                main_image_status.error("Image analysis failed.")
+                st.error(
+                    "The image-analysis service could not process this image. "
+                    "Please try again or upload a different image."
             )
-
-        st.session_state.pending_image_question = (
-            "Can this item be recycled, and how should it be disposed of?"
-        )
-
-        st.rerun()
 
     if "image_description" in st.session_state:
         st.success("Image analyzed")
@@ -441,6 +500,9 @@ if prompt:
 
     with st.chat_message("assistant"):
         print("Calling LLM...", flush=True)
+
+        scroll_to_bottom()
+        
         prompt_characters = sum(
             len(message.get("content", ""))
             for message in messages_for_llm
