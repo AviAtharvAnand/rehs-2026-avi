@@ -178,6 +178,7 @@ with st.sidebar:
                     "Can this item be recycled, and how should it be disposed of?"
                 )
 
+                st.session_state.prompt_uses_image = True
                 st.session_state.busy = True
                 st.rerun()
 
@@ -190,14 +191,16 @@ with st.sidebar:
 
     if "image_description" in st.session_state:
         st.success("Image analyzed")
-        st.write(st.session_state.image_description)
+        # st.write(st.session_state.image_description)
 
 system_prompt ={
             "role": "system", "content": 
             """
-                You are a Recycling assistant, who always provides detailed in depth information.
+                You are a Recycling assistant, who always provides concise and accurate information.
 
-                For every question You answer ONLY from the documentation provided in the user's message.             
+                For every question answer from the documentation provided in the user's message.   
+
+                Try to keep responses under 100 words and in bullet points.
             """
             }
 
@@ -206,7 +209,17 @@ if "messages" not in st.session_state:
 
 for msg in st.session_state.messages:
     if msg["role"] != "system":
-        st.chat_message(msg["role"]).write(msg["content"])
+        with st.chat_message(msg["role"]):
+            st.write(msg["content"])
+
+            if msg["role"] == "assistant" and msg.get("sources"):
+                with st.expander("📚 Sources"):
+                    for chunk in msg["sources"]:
+                        st.markdown(
+                            f"- [{chunk['title']}]({chunk['source_url']}) "
+                            f"*(distance: {chunk['score']:.3f}, "
+                            f"reranked: {chunk['rank_score']:.3f})*"
+                        )
 
 STOP_WORDS = {
     "a", "an", "the", "is", "are", "i", "you", "we",
@@ -399,10 +412,18 @@ if typed_prompt:
 prompt = st.session_state.pending_prompt
 
 if prompt:
-    image_description = st.session_state.get(
-        "image_description",
-        None
+    uses_image = st.session_state.get(
+        "prompt_uses_image",
+        False
     )
+
+    if uses_image:
+        image_description = st.session_state.get(
+            "image_description",
+            None
+        )
+    else:
+        image_description = None
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
@@ -421,7 +442,7 @@ if prompt:
             else:
                 question_for_rag = prompt
 
-            st.write("Image analysis:", image_description)
+            # st.write("Image analysis:", image_description)
             standalone_query = rewrite_follow_up_with_ai(
                 st.session_state.messages[:-1],
                 question_for_rag,
@@ -549,7 +570,19 @@ if prompt:
                     f"reranked: {chunk['rank_score']:.3f})*"
                 )
 
-    st.session_state.messages.append({"role": "assistant", "content": answer})
+    st.session_state.messages.append(
+        {
+            "role": "assistant",
+            "content": answer,
+            "sources": chunks
+        }
+    )
     st.session_state.pending_prompt = None
     st.session_state.busy = False
+
+    if st.session_state.get("prompt_uses_image", False):
+        st.session_state.pop("image_description", None)
+        st.session_state.pop("recycling_image", None)
+        st.session_state.prompt_uses_image = False
+
     st.rerun()
