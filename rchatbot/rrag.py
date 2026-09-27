@@ -24,6 +24,11 @@ st.set_page_config(page_title="Recycle Assistant", page_icon="♻️")
 st.title("♻️ Recycle Assistant", anchor = False)
 st.caption("Helping You Recycle Effectively Using Trusted Documentation")
 main_image_status = st.empty()
+if "busy" not in st.session_state:
+    st.session_state.busy = False
+
+if "pending_prompt" not in st.session_state:
+    st.session_state.pending_prompt = None
 
 def scroll_to_bottom():
     components.html(
@@ -133,6 +138,8 @@ with st.sidebar:
     if st.button("🗑️ Clear chat"):
         st.session_state.pop("messages", None)
         st.session_state.pop("image_description", None)
+        st.session_state.pending_prompt = None
+        st.session_state.busy = False
         st.rerun()
 
     st.divider()
@@ -141,7 +148,8 @@ with st.sidebar:
     uploaded_image = st.file_uploader(
         "Upload an item to check",
         type=["jpg", "jpeg", "png"],
-        key="recycling_image"
+        key="recycling_image",
+        disabled=st.session_state.busy
     )
 
     if uploaded_image:
@@ -150,7 +158,7 @@ with st.sidebar:
             caption="Item to analyze",
             use_container_width=True
         )
-    if st.button("🔍 Analyze Item"):
+    if st.button("🔍 Analyze Item", disabled=st.session_state.busy):
         if uploaded_image is None:
             st.error("Please upload an image before analyzing.")
         else:
@@ -166,10 +174,11 @@ with st.sidebar:
 
                 main_image_status.success("✅ Image analysis complete")
 
-                st.session_state.pending_image_question = (
+                st.session_state.pending_prompt = (
                     "Can this item be recycled, and how should it be disposed of?"
                 )
 
+                st.session_state.busy = True
                 st.rerun()
 
             except InternalServerError:
@@ -377,14 +386,17 @@ def rewrite_follow_up_with_ai(messages, current_question):
 
     return response.choices[0].message.content.strip()
 
-typed_prompt = st.chat_input("Ask about Recycling...")
-
-auto_prompt = st.session_state.pop(
-    "pending_image_question",
-    None
+typed_prompt = st.chat_input(
+    "Ask about Recycling...",
+    disabled=st.session_state.busy
 )
 
-prompt = typed_prompt or auto_prompt
+if typed_prompt:
+    st.session_state.pending_prompt = typed_prompt
+    st.session_state.busy = True
+    st.rerun()
+
+prompt = st.session_state.pending_prompt
 
 if prompt:
     image_description = st.session_state.get(
@@ -538,3 +550,6 @@ if prompt:
                 )
 
     st.session_state.messages.append({"role": "assistant", "content": answer})
+    st.session_state.pending_prompt = None
+    st.session_state.busy = False
+    st.rerun()
