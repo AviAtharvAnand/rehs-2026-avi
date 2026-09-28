@@ -23,10 +23,47 @@ CHROMA_PATH = BASE_DIR / "recycling_chroma_db"
 
 coll = chromadb.PersistentClient(path=str(CHROMA_PATH)).get_or_create_collection("recycling_docs")
 
-def search(query: str, k: int = 5) -> list[dict]:
-    res = coll.query(query_embeddings=[embed(query)], n_results=k)
+def search(
+    query: str,
+    k: int = 5,
+    state: str | None = None,
+    county: str | None = None,
+) -> list[dict]:
+
+    where = None
+
+    if state and county:
+        where = {
+            "$or": [
+                {
+                    "$and": [
+                        {"state": state},
+                        {"county": county}
+                    ]
+                },
+                {"scope": "general"}
+            ]
+        }
+
+    elif state:
+        where = {
+            "$or": [
+                {"state": state},
+                {"scope": "general"}
+            ]
+        }
+    
+    res = coll.query(query_embeddings=[embed(query)], n_results=k, where=where)
     return [
-        {"text": d, "source_url": m["source_url"], "title": m["title"], "score": s}
+        {
+            "text": d,
+            "source_url": m["source_url"],
+            "title": m["title"],
+            "score": s,
+            "scope": m.get("scope"),
+            "state": m.get("state"),
+            "county": m.get("county"),
+        }
         for d, m, s in zip(res["documents"][0], res["metadatas"][0], res["distances"][0])
     ]
  

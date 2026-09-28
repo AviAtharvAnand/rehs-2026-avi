@@ -13,6 +13,42 @@ splitter = RecursiveCharacterTextSplitter(
 
 docs = Path("recycling_markdown")
 
+def clean_name(name):
+    return name.replace("_", " ").replace("-", " ").title()
+
+
+def get_metadata(md_file, docs):
+    relative = md_file.relative_to(docs)
+    parts = relative.parts
+
+    metadata = {
+        "scope": "general",
+        "state": None,
+        "county": None,
+        "service_area": None,
+        "city": None,
+    }
+
+    if len(parts) >= 2:
+        state_folder = parts[0]
+
+        if state_folder.lower() != "general":
+            metadata["scope"] = "local"
+            metadata["state"] = clean_name(state_folder)
+
+        if len(parts) >= 3:
+            county_folder = parts[1]
+
+            county_name = (
+                county_folder
+                .replace("_County", "")
+                .replace("-County", "")
+            )
+
+            metadata["county"] = clean_name(county_name)
+
+    return metadata
+
 chunk_count = 0
 files = list(docs.rglob("*.md")) + list(docs.rglob("*.mdx"))
 
@@ -33,6 +69,8 @@ for md_file in files:
         f"rehs-2026-avi/blob/main/rchatbot/{relative_path}"
     )
 
+    metadata = get_metadata(md_file, docs)
+
     chunks = splitter.split_text(text)
 
     for i, chunk in enumerate(chunks, start=1):
@@ -42,6 +80,11 @@ for md_file in files:
             "source_url": url,
             "title": title,
             "text": chunk,
+            "scope": metadata["scope"],
+            "state": metadata["state"],
+            "county": metadata["county"],
+            "service_area": metadata["service_area"],
+            "city": metadata["city"],
         }
 
         # fill blanks

@@ -515,6 +515,9 @@ if prompt:
 
     Determine whether and how the item should be recycled or
     disposed of from the DOCUMENTATION.
+
+    If local recycling guidance conflicts with general recycling guidance,
+    follow the local guidance for the user's selected location.
     """
     conversation_history = [
         message

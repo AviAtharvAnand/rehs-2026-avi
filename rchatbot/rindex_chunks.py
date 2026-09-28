@@ -18,6 +18,23 @@ for file in Path("recycling/chunks").glob("*.json"):
 def embed(text: str) -> list[float]:
     return client.embeddings.create(model="qwen3-embedding", input=[text]).data[0].embedding
 
+def make_metadata(c):
+    metadata = {
+        "source_url": c["source_url"],
+        "title": c["title"],
+        "scope": c.get("scope"),
+        "state": c.get("state"),
+        "county": c.get("county"),
+        "service_area": c.get("service_area"),
+        "city": c.get("city"),
+    }
+
+    return {
+        key: value
+        for key, value in metadata.items()
+        if value is not None
+    }
+
 chroma_client = chromadb.PersistentClient(path="./recycling_chroma_db")
 
 try:
@@ -31,7 +48,7 @@ coll.add(
     ids=[c["id"] for c in chunks],
     documents=[c["text"] for c in chunks],
     embeddings=[embed(c["text"]) for c in chunks],
-    metadatas=[{"source_url": c["source_url"], "title": c["title"]} for c in chunks],
+    metadatas=[make_metadata(c) for c in chunks],
 )
 
 print(f"Indexed {coll.count()} chunks.")
