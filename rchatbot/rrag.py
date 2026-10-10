@@ -14,6 +14,8 @@ from PIL import Image
 from io import BytesIO
 from openai import InternalServerError
 import streamlit.components.v1 as components
+from streamlit_geolocation import streamlit_geolocation
+from geopy.geocoders import Nominatim
 
 
 load_dotenv()
@@ -29,6 +31,10 @@ if "busy" not in st.session_state:
 
 if "pending_prompt" not in st.session_state:
     st.session_state.pending_prompt = None
+
+geolocator = Nominatim(
+    user_agent="recycle-assistant"
+)
 
 def scroll_to_bottom():
     components.html(
@@ -141,6 +147,42 @@ with st.sidebar:
         st.session_state.pending_prompt = None
         st.session_state.busy = False
         st.rerun()
+
+    st.divider()
+    st.subheader("🌍 Your Location")
+    st.write("Provide Location Privileges:")
+    location = streamlit_geolocation()
+    if location and location.get("latitude") is not None:
+
+        latitude = location["latitude"]
+        longitude = location["longitude"]
+
+        result = geolocator.reverse(
+            (latitude, longitude),
+            exactly_one=True
+        )
+
+        if result:
+            address = result.raw.get("address", {})
+
+            state = address.get("state")
+
+            county = address.get("county")
+            if county:
+                county = county.replace(" County", "")
+
+            city = (
+                address.get("city")
+                or address.get("town")
+                or address.get("village")
+            )
+
+            st.write("State:", state)
+            st.write("County:", county)
+            st.write("City:", city)
+            st.session_state.state = state
+            st.session_state.county = county
+            st.session_state.city = city
 
     st.divider()
     st.subheader("📷 Check an Item")
