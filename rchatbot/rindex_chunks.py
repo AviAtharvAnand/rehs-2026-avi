@@ -27,6 +27,7 @@ def make_metadata(c):
         "county": c.get("county"),
         "service_area": c.get("service_area"),
         "city": c.get("city"),
+        "location_level": c.get("location_level"),
     }
 
     return {

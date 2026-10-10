@@ -27,6 +27,7 @@ def get_metadata(md_file, docs):
         "county": None,
         "service_area": None,
         "city": None,
+         "location_level": "general",
     }
 
     if len(parts) >= 2:
@@ -35,6 +36,7 @@ def get_metadata(md_file, docs):
         if state_folder.lower() != "general":
             metadata["scope"] = "local"
             metadata["state"] = clean_name(state_folder)
+            metadata["location_level"] = "state"
 
         if len(parts) >= 3:
             county_folder = parts[1]
@@ -46,6 +48,12 @@ def get_metadata(md_file, docs):
             )
 
             metadata["county"] = clean_name(county_name)
+            metadata["location_level"] = "county"
+        if len(parts) >= 4:
+            service_area_folder = parts[2]
+
+            metadata["service_area"] = clean_name(service_area_folder)
+            metadata["location_level"] = "service_area"
 
     return metadata
 
@@ -85,6 +93,7 @@ for md_file in files:
             "county": metadata["county"],
             "service_area": metadata["service_area"],
             "city": metadata["city"],
+            "location_level": metadata["location_level"],
         }
 
         # fill blanks

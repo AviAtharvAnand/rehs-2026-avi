@@ -490,7 +490,13 @@ if prompt:
                 question_for_rag,
             )
             search_query = rewrite_search_query(standalone_query)
-            retrieved = search(search_query, k=10)
+            retrieved = search(
+                search_query,
+                k=10,
+                state=st.session_state.get("state"),
+                county=st.session_state.get("county"),
+                service_area=st.session_state.get("service_area"),
+            )
             reranked = rerank(search_query, retrieved)
 
             # print("All retrieved and reranked chunks:", flush=True)

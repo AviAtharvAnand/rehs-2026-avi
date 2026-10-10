@@ -28,11 +28,32 @@ def search(
     k: int = 5,
     state: str | None = None,
     county: str | None = None,
+    service_area: str | None = None,
 ) -> list[dict]:
 
     where = None
 
-    if state and county:
+    if state and county and service_area:
+        where = {
+            "$or": [
+                {
+                    "$and": [
+                        {"state": state},
+                        {"county": county},
+                        {"service_area": service_area}
+                    ]
+                },
+                {
+                    "$and": [
+                        {"state": state},
+                        {"county": county},
+                        {"location_level": "county"}
+                    ]
+                },
+                {"scope": "general"}
+            ]
+        }
+    elif state and county:
         where = {
             "$or": [
                 {
@@ -63,6 +84,8 @@ def search(
             "scope": m.get("scope"),
             "state": m.get("state"),
             "county": m.get("county"),
+            "service_area": m.get("service_area"),
+            "location_level": m.get("location_level"),
         }
         for d, m, s in zip(res["documents"][0], res["metadatas"][0], res["distances"][0])
     ]
