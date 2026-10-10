@@ -17,6 +17,7 @@ from openai import InternalServerError
 import streamlit.components.v1 as components
 from streamlit_geolocation import streamlit_geolocation
 from geopy.geocoders import Nominatim
+from pathlib import Path
 
 
 load_dotenv()
@@ -37,7 +38,10 @@ geolocator = Nominatim(
     user_agent="recycle-assistant"
 )
 
-with open("recycling_json/location_map.json", encoding="utf-8") as f:
+BASE_DIR = Path(__file__).resolve().parent
+LOCATION_MAP_PATH = BASE_DIR / "recycling_json" / "location_map.json"
+
+with open(LOCATION_MAP_PATH, encoding="utf-8") as f:
     location_map = json.load(f)
 
 def scroll_to_bottom():
@@ -566,6 +570,11 @@ if prompt:
     DOCUMENTATION:
     {context}
 
+    LOCATION:
+    State: {st.session_state.get("state")}
+    County: {st.session_state.get("county")}
+    Service Area: {st.session_state.get("service_area")}
+
     IMAGE DESCRIPTION:
     {image_description if image_description else "No image provided"}
 
@@ -578,8 +587,17 @@ if prompt:
     Determine whether and how the item should be recycled or
     disposed of from the DOCUMENTATION.
 
-    If local recycling guidance conflicts with general recycling guidance,
-    follow the local guidance for the user's selected location.
+    Prefer the most location-specific applicable guidance:
+    1. Service-area guidance
+    2. County guidance
+    3. State guidance
+    4. General guidance
+
+    If more specific local guidance conflicts with broader guidance,
+    follow the more specific local guidance.
+
+    Do not use recycling rules for a different service area,
+    county, or state.
     """
     conversation_history = [
         message

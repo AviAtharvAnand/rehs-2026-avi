@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: streamlit
-          image: aviatharvanand/recycle-helper:v40
+          image: aviatharvanand/recycle-helper:v46
           imagePullPolicy: Always
 
           ports:
