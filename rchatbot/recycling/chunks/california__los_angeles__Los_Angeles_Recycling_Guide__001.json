@@ -7,5 +7,6 @@
   "state": "California",
   "county": "Los Angeles",
   "service_area": null,
-  "city": null
+  "city": null,
+  "location_level": "county"
 }

@@ -1,6 +1,7 @@
 import os
 import streamlit as st
 from rsearch import search
+import json
 from dotenv import load_dotenv
 from openai import OpenAI
 from openai import BadRequestError
@@ -35,6 +36,9 @@ if "pending_prompt" not in st.session_state:
 geolocator = Nominatim(
     user_agent="recycle-assistant"
 )
+
+with open("recycling_json/location_map.json", encoding="utf-8") as f:
+    location_map = json.load(f)
 
 def scroll_to_bottom():
     components.html(
@@ -137,6 +141,13 @@ def analyze_recycling_image(uploaded_image):
 
     return response.choices[0].message.content.strip()
 
+def get_service_area(state, county, city):
+    return (
+        location_map
+        .get(state, {})
+        .get(county, {})
+        .get(city)
+    )
 
 with st.sidebar:
     st.header("Settings")
@@ -177,12 +188,15 @@ with st.sidebar:
                 or address.get("village")
             )
 
+            service_area = get_service_area(state, county, city)
             st.write("State:", state)
             st.write("County:", county)
             st.write("City:", city)
+            st.write("Service Area:", service_area)
             st.session_state.state = state
             st.session_state.county = county
             st.session_state.city = city
+            st.session_state.service_area = service_area
 
     st.divider()
     st.subheader("📷 Check an Item")

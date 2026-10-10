@@ -7,5 +7,6 @@
   "state": null,
   "county": null,
   "service_area": null,
-  "city": null
+  "city": null,
+  "location_level": "general"
 }

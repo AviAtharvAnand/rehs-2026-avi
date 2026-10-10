@@ -59,7 +59,8 @@ def search(
                 {
                     "$and": [
                         {"state": state},
-                        {"county": county}
+                        {"county": county},
+                        {"location_level": "county"}
                     ]
                 },
                 {"scope": "general"}
@@ -69,7 +70,12 @@ def search(
     elif state:
         where = {
             "$or": [
-                {"state": state},
+                {
+                    "$and": [
+                        {"state": state},
+                        {"location_level": "state"}
+                    ]
+                },
                 {"scope": "general"}
             ]
         }

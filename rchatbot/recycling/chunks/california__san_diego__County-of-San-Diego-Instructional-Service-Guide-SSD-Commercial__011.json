@@ -7,5 +7,6 @@
   "state": "California",
   "county": "San Diego",
   "service_area": null,
-  "city": null
+  "city": null,
+  "location_level": "county"
 }

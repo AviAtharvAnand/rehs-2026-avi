@@ -6,6 +6,7 @@
   "scope": "local",
   "state": "Nevada",
   "county": "Clark County",
-  "service_area": null,
-  "city": null
+  "service_area": "Mesquite",
+  "city": null,
+  "location_level": "service_area"
 }
