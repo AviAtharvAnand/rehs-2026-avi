@@ -587,6 +587,8 @@ if prompt:
     Determine whether and how the item should be recycled or
     disposed of from the DOCUMENTATION.
 
+    Answer based on the user's location
+    Mention the location in your answer.
     Prefer the most location-specific applicable guidance:
     1. Service-area guidance
     2. County guidance
