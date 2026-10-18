@@ -45,6 +45,8 @@ def get_metadata(md_file, docs):
                 county_folder
                 .replace("_County", "")
                 .replace("-County", "")
+                .replace("_county", "")
+                .replace("-county", "")
             )
 
             metadata["county"] = clean_name(county_name)

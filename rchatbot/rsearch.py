@@ -25,74 +25,85 @@ coll = chromadb.PersistentClient(path=str(CHROMA_PATH)).get_or_create_collection
 
 def search(
     query: str,
-    k: int = 5,
     state: str | None = None,
     county: str | None = None,
     service_area: str | None = None,
 ) -> list[dict]:
-
-    where = None
+    
+    query_embedding = embed(query)
+    results = []
 
     if state and county and service_area:
-        where = {
-            "$or": [
-                {
-                    "$and": [
-                        {"state": state},
-                        {"county": county},
-                        {"service_area": service_area}
-                    ]
-                },
-                {
-                    "$and": [
-                        {"state": state},
-                        {"county": county},
-                        {"location_level": "county"}
-                    ]
-                },
-                {"scope": "general"}
-            ]
-        }
-    elif state and county:
-        where = {
-            "$or": [
-                {
-                    "$and": [
-                        {"state": state},
-                        {"county": county},
-                        {"location_level": "county"}
-                    ]
-                },
-                {"scope": "general"}
-            ]
-        }
+        local_res = coll.query(
+            query_embeddings=[query_embedding],
+            n_results=8,
+            where={
+                "$and": [
+                    {"state": state},
+                    {"county": county},
+                    {"service_area": service_area},
+                ]
+            },
+        )
 
-    elif state:
-        where = {
-            "$or": [
-                {
-                    "$and": [
-                        {"state": state},
-                        {"location_level": "state"}
-                    ]
-                },
-                {"scope": "general"}
-            ]
-        }
-    
-    res = coll.query(query_embeddings=[embed(query)], n_results=k, where=where)
-    return [
-        {
-            "text": d,
-            "source_url": m["source_url"],
-            "title": m["title"],
-            "score": s,
-            "scope": m.get("scope"),
-            "state": m.get("state"),
-            "county": m.get("county"),
-            "service_area": m.get("service_area"),
-            "location_level": m.get("location_level"),
-        }
-        for d, m, s in zip(res["documents"][0], res["metadatas"][0], res["distances"][0])
-    ]
+        results.append(local_res)
+
+    if state and county:
+        county_res = coll.query(
+            query_embeddings=[query_embedding],
+            n_results=4,
+            where={
+                "$and": [
+                    {"state": state},
+                    {"county": county},
+                    {"location_level": "county"},
+                ]
+            },
+        )
+
+        results.append(county_res)
+
+    if state:
+        state_res = coll.query(
+            query_embeddings=[query_embedding],
+            n_results=4,
+            where={
+                "$and": [
+                    {"state": state},
+                    {"location_level": "state"},
+                ]
+            },
+        )
+
+        results.append(state_res)
+
+    general_res = coll.query(
+        query_embeddings=[query_embedding],
+        n_results=8,
+        where={"scope": "general"},
+    )
+
+    results.append(general_res)
+
+    combined = []
+
+    for res in results:
+        for d, m, s in zip(
+            res["documents"][0],
+            res["metadatas"][0],
+            res["distances"][0],
+        ):
+            combined.append({
+                "text": d,
+                "source_url": m["source_url"],
+                "title": m["title"],
+                "score": s,
+                "scope": m.get("scope"),
+                "state": m.get("state"),
+                "county": m.get("county"),
+                "service_area": m.get("service_area"),
+                "location_level": m.get("location_level"),
+            })
+
+    return combined
  

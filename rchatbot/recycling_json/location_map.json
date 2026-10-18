@@ -2,11 +2,8 @@
   "Nevada": {
     "Clark": {
       "Mesquite": "Mesquite",
-      "Boulder City": "Boulder City",
-      "Las Vegas": "Southern Nevada Republic Services",
-      "Henderson": "Southern Nevada Republic Services",
-      "North Las Vegas": "Southern Nevada Republic Services",
-      "Laughlin": "Southern Nevada Republic Services"
+      "Las Vegas": "Las Vegas Henderson",
+      "Henderson": "Las Vegas Henderson"
     }
   }
 }

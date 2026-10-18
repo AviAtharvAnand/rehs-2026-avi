@@ -48,17 +48,19 @@ def scroll_to_bottom():
     components.html(
         """
         <script>
-        const container =
-            window.parent.document.querySelector(
-                '[data-testid="stAppViewContainer"]'
-            );
+        setTimeout(() => {
+            const container =
+                window.parent.document.querySelector(
+                    '[data-testid="stAppViewContainer"]'
+                );
 
-        if (container) {
-            container.scrollTo({
-                top: container.scrollHeight,
-                behavior: 'smooth'
-            });
-        }
+            if (container) {
+                container.scrollTo({
+                    top: container.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }
+        }, 150);
         </script>
         """,
         height=0,
@@ -165,7 +167,7 @@ with st.sidebar:
 
     st.divider()
     st.subheader("🌍 Your Location")
-    st.write("Provide Location Privileges:")
+    st.write("Click to Enable Location Services")
     location = streamlit_geolocation()
     if location and location.get("latitude") is not None:
 
@@ -191,6 +193,9 @@ with st.sidebar:
                 or address.get("town")
                 or address.get("village")
             )
+
+            if state == "California" and city == "San Francisco" and not county:
+                county = "San Francisco"
 
             service_area = get_service_area(state, county, city)
             st.write("State:", state)
@@ -278,8 +283,9 @@ for msg in st.session_state.messages:
                         st.markdown(
                             f"- [{chunk['title']}]({chunk['source_url']}) "
                             f"*(distance: {chunk['score']:.3f}, "
-                            f"reranked: {chunk['rank_score']:.3f})*"
+                            # f"reranked: {chunk['rank_score']:.3f})*"
                         )
+
 
 STOP_WORDS = {
     "a", "an", "the", "is", "are", "i", "you", "we",
@@ -344,6 +350,14 @@ def rerank(question: str, chunks: list[dict]) -> list[dict]:
             - coverage * 0.15
             - phrase_matches * 0.08
         )
+        if chunk.get("location_level") == "service_area":
+            chunk["rank_score"] -= 0.20
+
+        elif chunk.get("location_level") == "county":
+            chunk["rank_score"] -= 0.10
+
+        elif chunk.get("location_level") == "state":
+            chunk["rank_score"] -= 0.05
 
     return sorted(chunks, key=lambda chunk: chunk["rank_score"])
 
@@ -467,6 +481,7 @@ typed_prompt = st.chat_input(
 if typed_prompt:
     st.session_state.pending_prompt = typed_prompt
     st.session_state.busy = True
+    st.session_state.scroll_after_submit = True
     st.rerun()
 
 prompt = st.session_state.pending_prompt
@@ -487,6 +502,11 @@ if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
+
+    if st.session_state.get("scroll_after_submit"):
+        scroll_to_bottom()
+        st.session_state.scroll_after_submit = False
+
     try:
         with st.spinner("Searching Recycling docs..."):
             if image_description:
@@ -503,6 +523,13 @@ if prompt:
                 question_for_rag = prompt
 
             # st.write("Image analysis:", image_description)
+            # st.write(
+            #     "LOCATION FILTER:",
+            #     st.session_state.get("state"),
+            #     st.session_state.get("county"),
+            #     st.session_state.get("service_area"),
+            #     flush=True,
+            # )
             standalone_query = rewrite_follow_up_with_ai(
                 st.session_state.messages[:-1],
                 question_for_rag,
@@ -510,12 +537,13 @@ if prompt:
             search_query = rewrite_search_query(standalone_query)
             retrieved = search(
                 search_query,
-                k=10,
                 state=st.session_state.get("state"),
                 county=st.session_state.get("county"),
                 service_area=st.session_state.get("service_area"),
             )
-            reranked = rerank(search_query, retrieved)
+            # reranked = rerank(search_query, retrieved)
+            # st.session_state.debug_retrieved = retrieved
+
 
             # print("All retrieved and reranked chunks:", flush=True)
             # for index, chunk in enumerate(reranked, start=1):
@@ -526,17 +554,17 @@ if prompt:
             #         flush=True,
             #     )
 
-            if not reranked:
+            if not retrieved:
                 st.error("No documentation chunks were returned by search.")
                 st.stop()
 
-            chunks = reranked[:5]
+            chunks = retrieved
 
-            print(f"Original question: {prompt}", flush=True)
-            print(f"Rewritten search query: {search_query}", flush=True)
-            print(f"Standalone query: {standalone_query}")
+            # print(f"Original question: {prompt}", flush=True)
+            # print(f"Rewritten search query: {search_query}", flush=True)
+            # print(f"Standalone query: {standalone_query}")
 
-            print("\nChunks being sent to the LLM:", flush=True)
+            # print("\nChunks being sent to the LLM:", flush=True)
 
             # for index, chunk in enumerate(chunks, start=1):
             #     print(
@@ -652,7 +680,7 @@ if prompt:
                 st.markdown(
                     f"- [{chunk['title']}]({chunk['source_url']}) "
                     f"*(distance: {chunk['score']:.3f}, "
-                    f"reranked: {chunk['rank_score']:.3f})*"
+                    # f"reranked: {chunk['rank_score']:.3f})*"
                 )
 
     st.session_state.messages.append(
@@ -671,3 +699,14 @@ if prompt:
         st.session_state.prompt_uses_image = False
 
     st.rerun()
+# if st.session_state.get("debug_retrieved"):
+#     st.subheader("Debug retrieval")
+
+#     for i, chunk in enumerate(st.session_state.debug_retrieved, start=1):
+#         st.write(
+#             i,
+#             chunk["title"],
+#             chunk.get("service_area"),
+#             chunk.get("location_level"),
+#             chunk["score"],
+#         )
