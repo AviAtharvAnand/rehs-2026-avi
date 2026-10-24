@@ -38,6 +38,9 @@ geolocator = Nominatim(
     user_agent="recycle-assistant"
 )
 
+if "image_uploader_version" not in st.session_state:
+    st.session_state.image_uploader_version = 0
+
 BASE_DIR = Path(__file__).resolve().parent
 LOCATION_MAP_PATH = BASE_DIR / "recycling_json" / "location_map.json"
 
@@ -161,6 +164,11 @@ with st.sidebar:
     if st.button("🗑️ Clear chat"):
         st.session_state.pop("messages", None)
         st.session_state.pop("image_description", None)
+        st.session_state.pop("last_image_id", None)
+        st.session_state.pop("prompt_uses_image", None)
+
+        st.session_state.image_uploader_version += 1
+
         st.session_state.pending_prompt = None
         st.session_state.busy = False
         st.rerun()
@@ -213,9 +221,19 @@ with st.sidebar:
     uploaded_image = st.file_uploader(
         "Upload an item to check",
         type=["jpg", "jpeg", "png"],
-        key="recycling_image",
+        key=f"recycling_image_{st.session_state.image_uploader_version}",
         disabled=st.session_state.busy
     )
+    if uploaded_image is not None:
+        current_image_id = (
+            uploaded_image.name,
+            uploaded_image.size,
+        )
+
+        if st.session_state.get("last_image_id") != current_image_id:
+            st.session_state.last_image_id = current_image_id
+            st.session_state.pop("image_description", None)
+            st.session_state.prompt_uses_image = False
 
     if uploaded_image:
         st.image(
@@ -487,18 +505,19 @@ if typed_prompt:
 prompt = st.session_state.pending_prompt
 
 if prompt:
-    uses_image = st.session_state.get(
-        "prompt_uses_image",
-        False
+    image_description = st.session_state.get(
+        "image_description",
+        None
     )
 
-    if uses_image:
-        image_description = st.session_state.get(
-            "image_description",
-            None
-        )
-    else:
-        image_description = None
+    if uploaded_image is not None and image_description is None:
+        with st.spinner("Analyzing uploaded image..."):
+            image_description = analyze_recycling_image(uploaded_image)
+            st.session_state.image_description = image_description
+
+    if uploaded_image is not None:
+        st.session_state.prompt_uses_image = True
+
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
@@ -694,8 +713,6 @@ if prompt:
     st.session_state.busy = False
 
     if st.session_state.get("prompt_uses_image", False):
-        st.session_state.pop("image_description", None)
-        st.session_state.pop("recycling_image", None)
         st.session_state.prompt_uses_image = False
 
     st.rerun()
