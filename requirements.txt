@@ -8,3 +8,4 @@ chromadb==1.5.9
 kubernetes
 streamlit-geolocation
 geopy
+Authlib==1.6.5

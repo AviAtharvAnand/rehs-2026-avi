@@ -1,3 +1,17 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: recycle-user-data
+  namespace: rehs-2026-chatbot
+
+spec:
+  accessModes:
+    - ReadWriteOnce
+
+  resources:
+    requests:
+      storage: 1Gi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -6,15 +20,20 @@ metadata:
   labels: {app: avi-recycle-helper}
 spec:
   replicas: 1
+
+  strategy:
+    type: Recreate
+
   selector:
-    matchLabels: {app: avi-recycle-helper}
+    matchLabels:
+      app: avi-recycle-helper
   template:
     metadata:
       labels: {app: avi-recycle-helper}
     spec:
       containers:
         - name: streamlit
-          image: aviatharvanand/recycle-helper:v53
+          image: aviatharvanand/recycle-helper:v61
           imagePullPolicy: Always
 
           ports:
@@ -29,6 +48,16 @@ spec:
 
             - name: NRP_LLM_BASE_URL
               value: https://ellm.nrp-nautilus.io/v1
+
+          volumeMounts:
+            - name: recycle-auth-secrets
+              mountPath: /app/rchatbot/.streamlit/secrets.toml
+              subPath: secrets.toml
+              readOnly: true
+
+            - name: recycle-user-data
+              mountPath: /app/data
+
           resources:
             requests:
               cpu: "250m"
@@ -36,6 +65,15 @@ spec:
             limits:
               cpu: "1"
               memory: "1Gi"
+      volumes:
+        - name: recycle-auth-secrets
+          secret:
+            secretName: recycle-auth-secrets
+        
+        - name: recycle-user-data
+          persistentVolumeClaim:
+            claimName: recycle-user-data
+        
 ---
 apiVersion: v1
 kind: Service
@@ -53,7 +91,6 @@ spec:
       protocol: TCP
 
   type: ClusterIP
-
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress

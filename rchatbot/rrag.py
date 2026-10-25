@@ -18,13 +18,27 @@ import streamlit.components.v1 as components
 from streamlit_geolocation import streamlit_geolocation
 from geopy.geocoders import Nominatim
 from pathlib import Path
+import sqlite3
+from datetime import datetime
+from collections import Counter
 
-
+DB_PATH = "/app/data/user_activity.db"
 load_dotenv()
 client = OpenAI(api_key=os.environ["NRP_LLM_TOKEN"],
                 base_url=os.environ.get("NRP_LLM_BASE_URL", "https://ellm.nrp-nautilus.io/v1"))
 
 st.set_page_config(page_title="Recycle Assistant", page_icon="♻️")
+if st.user.is_logged_in:
+    st.sidebar.write(f"Signed in as {st.user.name}")
+
+    if st.sidebar.button("Log out"):
+        st.logout()
+
+else:
+    st.sidebar.write("Sign in to save your recycling history and track your impact.")
+
+    if st.sidebar.button("Sign in with Google"):
+        st.login("google")
 st.title("♻️ Recycle Assistant", anchor = False)
 st.caption("Helping You Recycle Effectively Using Trusted Documentation")
 main_image_status = st.empty()
@@ -38,6 +52,7 @@ geolocator = Nominatim(
     user_agent="recycle-assistant"
 )
 
+
 if "image_uploader_version" not in st.session_state:
     st.session_state.image_uploader_version = 0
 
@@ -46,6 +61,120 @@ LOCATION_MAP_PATH = BASE_DIR / "recycling_json" / "location_map.json"
 
 with open(LOCATION_MAP_PATH, encoding="utf-8") as f:
     location_map = json.load(f)
+
+def init_user_db():
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS activity (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id TEXT NOT NULL,
+                timestamp TEXT NOT NULL,
+                item TEXT,
+                material TEXT,
+                action TEXT,
+                service_area TEXT
+            )
+            """
+        )
+        conn.commit()
+
+init_user_db()
+
+def save_activity(user_id, item, material, action, service_area):
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.execute(
+            """
+            INSERT INTO activity (
+                user_id,
+                timestamp,
+                item,
+                material,
+                action,
+                service_area
+            )
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (
+                user_id,
+                datetime.now().isoformat(),
+                item,
+                material,
+                action,
+                service_area,
+            ),
+        )
+        conn.commit()
+
+def get_user_activity(user_id):
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+
+        rows = conn.execute(
+            """
+            SELECT
+                id,
+                timestamp,
+                item,
+                material,
+                action,
+                service_area
+            FROM activity
+            WHERE user_id = ?
+            ORDER BY timestamp DESC
+            """,
+            (user_id,),
+        ).fetchall()
+
+    return [dict(row) for row in rows]
+
+def classify_activity(image_description, answer):
+    response = client.chat.completions.create(
+        model="qwen3-small",
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "/no think\n\n"
+                    "Extract recycling activity data from the provided information. "
+                    "Return exactly these fields:\n"
+                    "Item: <short item name>\n"
+                    "Material: <short material/category>\n"
+                    "Action: <one of Recycle, Trash, HHW, E-waste, Compost, Reuse, Donate, Other>\n"
+                    "Do not add any other text."
+                ),
+            },
+            {
+                "role": "user",
+                "content": f"""
+IMAGE DESCRIPTION:
+{image_description or "None"}
+
+ASSISTANT ANSWER:
+{answer}
+""",
+            },
+        ],
+        temperature=0,
+        timeout=30,
+        extra_body={
+            "chat_template_kwargs": {
+                "enable_thinking": False
+            }
+        },
+    )
+
+    text = response.choices[0].message.content.strip()
+
+    item_match = re.search(r"Item:\s*(.+)", text)
+    material_match = re.search(r"Material:\s*(.+)", text)
+    action_match = re.search(r"Action:\s*(.+)", text)
+
+    return {
+        "item": item_match.group(1).strip() if item_match else "Unknown",
+        "material": material_match.group(1).strip() if material_match else "Unknown",
+        "action": action_match.group(1).strip() if action_match else "Other",
+    }
 
 def scroll_to_bottom():
     components.html(
@@ -111,7 +240,7 @@ def analyze_recycling_image(uploaded_image):
 
                     "Return exactly these fields:\n"
                     "Object: <best identification>\n"
-                    "Material: <likely materials>\n"
+                    "Material: <one of Paper/Cardboard, Plastic, Glass, Metal, Electronics, Battery, Organic, Textile, Mixed Material, Other>\n"
                     "Condition: <clean, dirty, wet, contaminated, etc.>\n"
                     "Confidence: <high, medium, or low>\n"
                     "Alternative: <second most likely identification if uncertain>\n"
@@ -275,6 +404,67 @@ with st.sidebar:
     if "image_description" in st.session_state:
         st.success("Image analyzed")
         # st.write(st.session_state.image_description)
+    
+    if st.user.is_logged_in:
+        user_id = st.user.get("sub") or st.user.get("email")
+        activity_rows = get_user_activity(user_id)
+
+        st.sidebar.divider()
+        st.sidebar.subheader("📊 My Impact")
+
+        total_checked = len(activity_rows)
+
+        recyclable = sum(
+            1 for row in activity_rows
+            if row["action"] == "Recycle"
+        )
+
+        special_disposal = sum(
+            1 for row in activity_rows
+            if row["action"] in [
+                "HHW",
+                "E-waste",
+                "Compost",
+            ]
+        )
+
+        diverted = sum(
+            1 for row in activity_rows
+            if row["action"] != "Trash"
+        )
+
+        st.sidebar.metric("Items Checked", total_checked)
+        st.sidebar.metric("Recyclable", recyclable)
+        st.sidebar.metric("Special Disposal", special_disposal)
+        st.sidebar.metric("Diverted from Trash", diverted)
+
+        st.sidebar.divider()
+        st.sidebar.subheader("🕒 Recent Activity")
+
+        if activity_rows:
+            for row in activity_rows[:5]:
+                st.sidebar.write(
+                    f"**{row['item']}** — {row['action']}"
+                )
+        else:
+            st.sidebar.write("No activity yet.")
+
+        st.sidebar.divider()
+        st.sidebar.subheader("♻️ Material Breakdown")
+
+        materials = [
+            row["material"]
+            for row in activity_rows
+            if row["material"]
+        ]
+
+        material_counts = Counter(materials)
+
+        if material_counts:
+            for material, count in material_counts.most_common():
+                st.sidebar.write(f"**{material}:** {count}")
+        else:
+            st.sidebar.write("No material data yet.")
 
 system_prompt ={
             "role": "system", "content": 
@@ -709,6 +899,20 @@ if prompt:
             "sources": chunks
         }
     )
+
+    if st.user.is_logged_in and image_description:
+        activity = classify_activity(image_description, answer)
+
+        user_id = st.user.get("sub") or st.user.get("email")
+
+        save_activity(
+            user_id=user_id,
+            item=activity["item"],
+            material=activity["material"],
+            action=activity["action"],
+            service_area=st.session_state.get("service_area"),
+        )
+
     st.session_state.pending_prompt = None
     st.session_state.busy = False
 

@@ -5,3 +5,5 @@ practice/
 history.json
 chroma_db
 recycling_chroma_db
+rchatbot/.streamlit/secrets.toml
+rchatbot/.streamlit/production-secrets.toml
