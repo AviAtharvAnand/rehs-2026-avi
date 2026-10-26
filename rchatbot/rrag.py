@@ -29,7 +29,7 @@ load_dotenv()
 client = OpenAI(api_key=os.environ["NRP_LLM_TOKEN"],
                 base_url=os.environ.get("NRP_LLM_BASE_URL", "https://ellm.nrp-nautilus.io/v1"))
 
-st.set_page_config(page_title="Recyclops", page_icon=str(LOGO_PATH))
+st.set_page_config(page_title="ReCyclops", page_icon=str(LOGO_PATH))
 if st.user.is_logged_in:
     st.sidebar.write(f"Signed in as {st.user.name}")
 
@@ -55,11 +55,11 @@ with logo_col:
 
 with title_col:
     st.markdown(
-        "<h1 style='margin:0; font-size:70px;'>Recyclops</h1>",
+        "<h1 style='margin:0; font-size:70px;'>ReCyclops</h1>",
         unsafe_allow_html=True
     )
 
-st.caption("Helping You Recycle Effectively Using Trusted Documentation")
+st.caption("Helping You Recycle Effectively Using Retrieval-Augmented Generation with Trusted Documentation")
 
 main_image_status = st.empty()
 if "busy" not in st.session_state:
