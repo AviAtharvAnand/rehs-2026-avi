@@ -23,11 +23,13 @@ from datetime import datetime
 from collections import Counter
 
 DB_PATH = "/app/data/user_activity.db"
+BASE_DIR = Path(__file__).resolve().parent
+LOGO_PATH = BASE_DIR / "recyclops_logo.png"
 load_dotenv()
 client = OpenAI(api_key=os.environ["NRP_LLM_TOKEN"],
                 base_url=os.environ.get("NRP_LLM_BASE_URL", "https://ellm.nrp-nautilus.io/v1"))
 
-st.set_page_config(page_title="Recycle Assistant", page_icon="♻️")
+st.set_page_config(page_title="Recyclops", page_icon=str(LOGO_PATH))
 if st.user.is_logged_in:
     st.sidebar.write(f"Signed in as {st.user.name}")
 
@@ -39,8 +41,26 @@ else:
 
     if st.sidebar.button("Sign in with Google"):
         st.login("google")
-st.title("♻️ Recycle Assistant", anchor = False)
+
+logo_col, title_col = st.columns(
+    [1.2, 7],
+    vertical_alignment="center"
+)
+
+with logo_col:
+    st.image(
+        str(LOGO_PATH),
+        width=90
+    )
+
+with title_col:
+    st.markdown(
+        "<h1 style='margin:0; font-size:70px;'>Recyclops</h1>",
+        unsafe_allow_html=True
+    )
+
 st.caption("Helping You Recycle Effectively Using Trusted Documentation")
+
 main_image_status = st.empty()
 if "busy" not in st.session_state:
     st.session_state.busy = False
@@ -56,7 +76,7 @@ geolocator = Nominatim(
 if "image_uploader_version" not in st.session_state:
     st.session_state.image_uploader_version = 0
 
-BASE_DIR = Path(__file__).resolve().parent
+
 LOCATION_MAP_PATH = BASE_DIR / "recycling_json" / "location_map.json"
 
 with open(LOCATION_MAP_PATH, encoding="utf-8") as f:
@@ -147,12 +167,12 @@ def classify_activity(image_description, answer):
             {
                 "role": "user",
                 "content": f"""
-IMAGE DESCRIPTION:
-{image_description or "None"}
+                IMAGE DESCRIPTION:
+                {image_description or "None"}
 
-ASSISTANT ANSWER:
-{answer}
-""",
+                ASSISTANT ANSWER:
+                {answer}
+                """,
             },
         ],
         temperature=0,
@@ -295,6 +315,7 @@ with st.sidebar:
         st.session_state.pop("image_description", None)
         st.session_state.pop("last_image_id", None)
         st.session_state.pop("prompt_uses_image", None)
+        st.session_state.show_camera = False
 
         st.session_state.image_uploader_version += 1
 
@@ -347,16 +368,40 @@ with st.sidebar:
     st.divider()
     st.subheader("📷 Check an Item")
 
+    if "show_camera" not in st.session_state:
+        st.session_state.show_camera = False
+
+    if st.button("📷 Open Camera"):
+        st.session_state.show_camera = True
+
+    camera_image = None
+
+    if st.session_state.show_camera:
+        camera_image = st.camera_input(
+            "Take a photo",
+            key=f"camera_image_{st.session_state.image_uploader_version}",
+            disabled=st.session_state.busy
+        )
+
+        if st.button("Close Camera"):
+            st.session_state.show_camera = False
+            st.rerun()
+
+    st.caption("OR")
+
     uploaded_image = st.file_uploader(
         "Upload an item to check",
         type=["jpg", "jpeg", "png"],
         key=f"recycling_image_{st.session_state.image_uploader_version}",
         disabled=st.session_state.busy
     )
-    if uploaded_image is not None:
+
+    selected_image = camera_image or uploaded_image
+
+    if selected_image is not None:
         current_image_id = (
-            uploaded_image.name,
-            uploaded_image.size,
+            getattr(selected_image, "name", "camera_photo"),
+            selected_image.size,
         )
 
         if st.session_state.get("last_image_id") != current_image_id:
@@ -364,15 +409,15 @@ with st.sidebar:
             st.session_state.pop("image_description", None)
             st.session_state.prompt_uses_image = False
 
-    if uploaded_image:
+    if selected_image:
         st.image(
-            uploaded_image,
+            selected_image,
             caption="Item to analyze",
             use_container_width=True
         )
     if st.button("🔍 Analyze Item", disabled=st.session_state.busy):
-        if uploaded_image is None:
-            st.error("Please upload an image before analyzing.")
+        if selected_image is None:
+            st.error("Please take a photo or upload an image before analyzing.")
         else:
             try:
                 main_image_status.info("🔍 Analyzing image...")
@@ -381,7 +426,7 @@ with st.sidebar:
 
                 with st.spinner("Analyzing image..."):
                     st.session_state.image_description = (
-                        analyze_recycling_image(uploaded_image)
+                        analyze_recycling_image(selected_image)
                     )
 
                 main_image_status.success("✅ Image analysis complete")
@@ -490,7 +535,7 @@ for msg in st.session_state.messages:
                     for chunk in msg["sources"]:
                         st.markdown(
                             f"- [{chunk['title']}]({chunk['source_url']}) "
-                            f"*(distance: {chunk['score']:.3f}, "
+                            f"*(distance: {chunk['score']:.3f}) "
                             # f"reranked: {chunk['rank_score']:.3f})*"
                         )
 
@@ -700,12 +745,12 @@ if prompt:
         None
     )
 
-    if uploaded_image is not None and image_description is None:
+    if selected_image is not None and image_description is None:
         with st.spinner("Analyzing uploaded image..."):
-            image_description = analyze_recycling_image(uploaded_image)
+            image_description = analyze_recycling_image(selected_image)
             st.session_state.image_description = image_description
 
-    if uploaded_image is not None:
+    if selected_image is not None:
         st.session_state.prompt_uses_image = True
 
     st.session_state.messages.append({"role": "user", "content": prompt})
